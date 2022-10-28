@@ -1,3 +1,4 @@
+from typing import List
 from datetime import datetime
 
 
@@ -34,6 +35,24 @@ class User:
         self.international_postage_cost = international_postage_cost
         self.domestic_postage_countries = domestic_postage_countries
         self.greeting_card_cost = greeting_card_cost
+
+    @classmethod
+    def from_json(cls, json: dict):
+        return cls(
+            first_name=json['first_name'],
+            last_name=json['last_name'],
+            credits=json['credits'],
+            date_joined=helpers.to_datetime(json['date_joined']),
+            street=json['address_line_1'],
+            city=json['city'],
+            state=json['state'],
+            postal_code=json['postal'],
+            country=json['country'],
+            domestic_postage_cost=json['postage']['domestic_cost'],
+            international_postage_cost=json['postage']['international_cost'],
+            domestic_postage_countries=set(json['postage']['domestic_countries']),
+            greeting_card_cost=json['product_pricing_info']['5x7greetingcard']
+        )
 
     def __repr__(self) -> str:
         return (
@@ -74,4 +93,68 @@ class User:
             f'International Postage Cost: {formatted_international_postage_cost}\n'
             f'Domestic Postage Countries: {formatted_domestic_postage_countries}\n'
             f'Greeting Card Cost: {formatted_greeting_card_cost}\n'
+        )
+
+class Gift:
+    def __init__(
+        self,
+        name: str,
+        thumbnail: str,
+        cost: int,
+        shipping_and_handling_cost: int,
+    ) -> None:
+        self.name = name
+        self.thumbnail = thumbnail
+        self.cost = cost
+        self.shipping_and_handling_cost = shipping_and_handling_cost
+
+    @classmethod
+    def from_json(cls, json: dict):
+        return cls(
+            name=json['gift_name'],
+            thumbnail=json['image'],
+            cost=json['price'],
+            shipping_and_handling_cost=json['shipping_and_handling'],
+        )
+
+    def __repr__(self) -> str:
+        return (
+            '('
+            f'name={self.name}, '
+            f'thumbnail={self.thumbnail}, '
+            f'cost={self.cost}, '
+            f'shipping_and_handling_cost={self.shipping_and_handling_cost}'
+            ')'
+        )
+
+class Template:
+    def __init__(
+        self,
+        id: int,
+        name: str,
+        thumbnail: str,
+        gifts: List[Gift],
+    ) -> None:
+        self.id = id
+        self.name = name
+        self.thumbnail = thumbnail
+        self.gifts = gifts
+
+    @classmethod
+    def from_json(cls, json: dict):
+        return cls(
+            id=json['id'],
+            name=json['name'],
+            thumbnail=json['thumbnail'],
+            gifts=list(map(Gift.from_json, json['gifts'])),
+        )
+    
+    def __repr__(self) -> str:
+        return (
+            '('
+            f'id={self.id}, '
+            f'name={self.name}, '
+            f'thumbnail={self.thumbnail}, '
+            f'gifts={self.gifts}'
+            ')'
         )
