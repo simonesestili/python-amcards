@@ -158,3 +158,31 @@ class Template:
             f'gifts={self.gifts}'
             ')'
         )
+
+class Campaign:
+    def __init__(
+        self,
+        id: int,
+        name: str,
+        send_if_duplicate: bool = False,
+    ) -> None:
+        self.id = id
+        self.name = name
+        self.send_if_duplicate = send_if_duplicate
+
+    @classmethod
+    def from_json(cls, json: dict):
+        return cls(
+            id=json['id'],
+            name=json['title'],
+            send_if_duplicate=json['send_even_if_duplicate'],
+        )
+
+    def __repr__(self) -> str:
+        return (
+            '('
+            f'id={self.id}, '
+            f'name={self.name}, '
+            f'send_if_duplicate={self.send_if_duplicate}'
+            ')'
+        )
