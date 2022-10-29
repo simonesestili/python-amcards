@@ -146,7 +146,7 @@ class Template:
             id=json['id'],
             name=json['name'],
             thumbnail=json['thumbnail'],
-            gifts=list(map(Gift.from_json, json['gifts'])),
+            gifts=[Gift.from_json(gift_json) for gift_json in json['gifts']],
         )
     
     def __repr__(self) -> str:

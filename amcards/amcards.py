@@ -32,7 +32,7 @@ class AMcardsClient:
         if not templates_json:
             return None
 
-        return list(map(Template.from_json, templates_json))
+        return [Template.from_json(template_json) for template_json in templates_json]
 
     def quicksends(self) -> List[Template]:
         res = requests.get(url=f'{DOMAIN}/.api/v1/quicksendtemplate/', headers=self.HEADERS)
@@ -41,7 +41,7 @@ class AMcardsClient:
         if not templates_json:
             return None
 
-        return list(map(Template.from_json, templates_json))
+        return [Template.from_json(template_json) for template_json in templates_json]
 
     def campaigns(self) -> List[Campaign]:
         res = requests.get(url=f'{DOMAIN}/.api/v1/campaign/', headers=self.HEADERS)
@@ -50,5 +50,5 @@ class AMcardsClient:
         if not campaigns_json:
             return None
 
-        return list(map(Campaign.from_json, campaigns_json))
+        return [Campaign.from_json(campaign_json) for campaign_json in campaigns_json]
 
