@@ -12,4 +12,7 @@ class InsufficientCreditsError(AMcardsException):
     """Clients' user has insufficient credits"""
 
 class DateFormatError(AMcardsException, ValueError):
-    """Invalid format for send date"""
+    """Invalid format for date"""
+
+class PhoneFormatError(AMcardsException, ValueError):
+    """Invalid format for phone number"""
