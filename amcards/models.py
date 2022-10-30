@@ -12,7 +12,7 @@ class User:
         last_name: str,
         credits: int,
         date_joined: datetime,
-        street: str,
+        address_line_1: str,
         city: str,
         state: str,
         postal_code: str,
@@ -26,7 +26,7 @@ class User:
         self.last_name = last_name
         self.credits = credits
         self.date_joined = date_joined
-        self.street = street
+        self.address_line_1 = address_line_1
         self.city = city
         self.state = state
         self.postal_code = postal_code
@@ -43,7 +43,7 @@ class User:
             last_name=json['last_name'],
             credits=json['credits'],
             date_joined=helpers.to_datetime(json['date_joined']),
-            street=json['address_line_1'],
+            address_line_1=json['address_line_1'],
             city=json['city'],
             state=json['state'],
             postal_code=json['postal'],
@@ -61,7 +61,7 @@ class User:
             f'last_name={self.last_name}, '
             f'credits={self.credits}, '
             f'date_joined={self.date_joined}, '
-            f'street={self.street}, '
+            f'address_line_1={self.address_line_1}, '
             f'city={self.city}, '
             f'state={self.state}, '
             f'postal_code={self.postal_code}, '
@@ -84,7 +84,7 @@ class User:
             f'Last Name: {self.last_name}\n'
             f'Credit Balance: {formatted_credits}\n'
             f'Date Joined: {self.date_joined}\n'
-            f'Street: {self.street}\n'
+            f'Address Line 1: {self.address_line_1}\n'
             f'City: {self.city}\n'
             f'State: {self.state}\n'
             f'Postal Code: {self.postal_code}\n'
@@ -185,4 +185,23 @@ class Campaign:
             f'name={self.name}, '
             f'send_if_duplicate={self.send_if_duplicate}'
             ')'
+        )
+
+class CardResponse:
+    def __init__(
+        self,
+        card_id: int,
+        total_cost: int,
+        user_email: str,
+    ) -> None:
+        self.card_id = card_id
+        self.total_cost = total_cost
+        self.user_email = user_email
+
+    @classmethod
+    def from_json(cls, json: dict):
+        return cls(
+            card_id=json['card'],
+            total_cost=json['total_cost'],
+            user_email=json['user'],
         )
