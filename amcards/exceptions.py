@@ -1,6 +1,16 @@
 class AMcardsException(Exception):
+    """Base exception for all exceptions raised by AMcards"""
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
+
+class ForbiddenResourceError(AMcardsException):
+    """Base exception for when client attempts to access a resource it does not have permission to"""
+
+class ForbiddenTemplateError(ForbiddenResourceError):
+    """Template is not owned by clients' user"""
+
+class ForbiddenCampaignError(ForbiddenResourceError):
+    """Campaign is not owned by clients' user"""
 
 class ShippingAddressError(AMcardsException, ValueError):
     """Some shipping address fields are missing or invalid"""
