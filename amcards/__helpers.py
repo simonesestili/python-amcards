@@ -57,6 +57,10 @@ def is_valid_date(date: str) -> bool:
             return False
     return True
 
+def is_valid_phone(phone: str) -> bool:
+    if not isinstance(phone, str): return False
+    return len(phone) == 10 and phone.isdigit()
+
 def sanitize_shipping_address_for_card_send(shipping_address: dict) -> dict:
     sanitized_shipping_address = {field: shipping_address[field] for field in REQUIRED_SHIPPING_ADDRESS_FIELDS}
     for optional in CARD_OPTIONAL_SHIPPING_ADDRESS_FIELDS:
