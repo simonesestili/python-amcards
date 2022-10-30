@@ -205,3 +205,22 @@ class CardResponse:
             total_cost=json['total_cost'],
             user_email=json['user'],
         )
+
+class CampaignResponse:
+    def __init__(
+        self,
+        mailing_id: int,
+        card_ids: List[int],
+        user_email: str,
+    ) -> None:
+        self.mailing_id = mailing_id
+        self.card_ids = card_ids
+        self.user_email = user_email
+
+    @classmethod
+    def from_json(cls, json: dict):
+        return cls(
+            mailing_id=json['mailing'],
+            card_ids=json['cards'],
+            user_email=json['user'],
+        )
