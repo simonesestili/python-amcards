@@ -10,7 +10,15 @@ REQUIRED_SHIPPING_ADDRESS_FIELDS = {
     'country',
 }
 
-OPTIONAL_SHIPPING_ADDRESS_FIELDS = {
+CARD_OPTIONAL_SHIPPING_ADDRESS_FIELDS = {
+    'organization',
+    'phone_number',
+    'birth_date',
+    'anniversary_date',
+    'third_party_contact_id',
+}
+
+CAMPAIGN_OPTIONAL_SHIPPING_ADDRESS_FIELDS = {
     'organization',
     'third_party_contact_id',
 }
@@ -49,9 +57,16 @@ def is_valid_date(date: str) -> bool:
             return False
     return True
 
-def sanitize_shipping_address(shipping_address: dict) -> dict:
-    sanitized_shipping_address = {field: shipping_address[field] for field in shipping_address}
-    for optional in OPTIONAL_SHIPPING_ADDRESS_FIELDS:
+def sanitize_shipping_address_for_card_send(shipping_address: dict) -> dict:
+    sanitized_shipping_address = {field: shipping_address[field] for field in REQUIRED_SHIPPING_ADDRESS_FIELDS}
+    for optional in CARD_OPTIONAL_SHIPPING_ADDRESS_FIELDS:
+        if optional not in shipping_address: continue
+        sanitized_shipping_address[optional] = shipping_address[optional]
+    return sanitized_shipping_address
+
+def sanitize_shipping_address_for_campaign_send(shipping_address: dict) -> dict:
+    sanitized_shipping_address = {field: shipping_address[field] for field in REQUIRED_SHIPPING_ADDRESS_FIELDS}
+    for optional in CAMPAIGN_OPTIONAL_SHIPPING_ADDRESS_FIELDS:
         if optional not in shipping_address: continue
         sanitized_shipping_address[optional] = shipping_address[optional]
     return sanitized_shipping_address
