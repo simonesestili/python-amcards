@@ -61,7 +61,7 @@ class AMcardsClient:
         return_address: dict = None,
         send_date: str = None
     ):
-        # Validate shipping details
+        # Validate shipping address
         missings = helpers.get_missing_required_shipping_address_fields(shipping_address)
         if missings:
             error_message = 'Missing the following required shipping address fields: ' + ', '.join(missings)
@@ -69,8 +69,8 @@ class AMcardsClient:
 
         # Validate send date
         if send_date is not None and not helpers.is_valid_date(send_date):
-            error_message = 'Invalid send_date format, please specify send date as "YYYY-MM-DD", or omit it'
-            raise exceptions.SendDateError(error_message)
+            error_message = 'Invalid send_date format, please specify date as "YYYY-MM-DD", or omit it'
+            raise exceptions.DateFormatError(error_message)
 
         # Sanitize shipping address and return address
         shipping_address = helpers.sanitize_shipping_address_for_card_send(shipping_address)
@@ -111,7 +111,7 @@ class AMcardsClient:
         return_address: dict = None,
         send_date: str = None
     ):
-        # Validate shipping details
+        # Validate shipping address
         missings = helpers.get_missing_required_shipping_address_fields(shipping_address)
         if missings:
             error_message = 'Missing the following required shipping address fields: ' + ', '.join(missings)
@@ -119,8 +119,8 @@ class AMcardsClient:
 
         # Validate send date
         if send_date is not None and not helpers.is_valid_date(send_date):
-            error_message = 'Invalid send_date format, please specify send date as "YYYY-MM-DD", or omit it'
-            raise exceptions.SendDateError(error_message)
+            error_message = 'Invalid send_date format, please specify date as "YYYY-MM-DD", or omit it'
+            raise exceptions.DateFormatError(error_message)
 
         # Sanitize shipping address and return address
         shipping_address = helpers.sanitize_shipping_address_for_campaign_send(shipping_address)
@@ -128,6 +128,19 @@ class AMcardsClient:
             return_address = helpers.sanitize_return_address(return_address)
             # prefix return address fields with return_
             return_address = {f'return_{key}': value for key, value in return_address.items()}
+
+        # Validate birth_date
+        if 'birth_date' in shipping_address and not helpers.is_valid_date(shipping_address['birth_date']):
+            error_message = 'Invalid birth_date format, please specify date as "YYYY-MM-DD", or omit it'
+            raise exceptions.DateFormatError(error_message)
+        # Validate anniversary_date
+        if 'anniversary_date' in shipping_address and not helpers.is_valid_date(shipping_address['anniversary_date']):
+            error_message = 'Invalid anniversary_date format, please specify date as "YYYY-MM-DD", or omit it'
+            raise exceptions.DateFormatError(error_message)
+        # Validate phone_number
+        if 'phone_number' in shipping_address and not helpers.is_valid_phone(shipping_address['phone_number']):
+            error_message = 'Invalid phone_number format, please specify phone as a 10 number string with no special formatting (ex. 15556667777), or omit it'
+            raise exceptions.PhoneFormatError(error_message)
 
         # Build request json payload
         body = {
