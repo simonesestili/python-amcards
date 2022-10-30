@@ -99,6 +99,8 @@ class AMcardsClient:
                 raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
             case 402:
                 raise exceptions.InsufficientCreditsError('Clients\' user has insufficient credits, no card was scheduled')
+            case 403:
+                raise exceptions.ForbiddenTemplateError(f'Clients\' user does not own given template with id of {template_id}')
 
         res_json = res.json()
         return CardResponse.from_json(res_json)
@@ -162,6 +164,8 @@ class AMcardsClient:
                 raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
             case 402:
                 raise exceptions.InsufficientCreditsError('Clients\' user has insufficient credits, no cards were scheduled')
+            case 403:
+                raise exceptions.ForbiddenCampaignError(f'Clients\' user does not own given campaign with id of {campaign_id}')
             case 409:
                 raise exceptions.DuplicateCampaignError('Duplicates were detected, no cards were scheduled')
 
