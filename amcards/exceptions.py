@@ -16,3 +16,6 @@ class DateFormatError(AMcardsException, ValueError):
 
 class PhoneFormatError(AMcardsException, ValueError):
     """Invalid format for phone number"""
+
+class DuplicateCampaignError(AMcardsException):
+    """Duplicate campaign detected"""
