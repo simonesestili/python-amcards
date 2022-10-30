@@ -11,5 +11,5 @@ class AuthenticationError(AMcardsException):
 class InsufficientCreditsError(AMcardsException):
     """Clients' user has insufficient credits"""
 
-class SendDateError(AMcardsException, ValueError):
+class DateFormatError(AMcardsException, ValueError):
     """Invalid format for send date"""
