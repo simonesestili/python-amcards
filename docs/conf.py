@@ -18,6 +18,7 @@ author = 'Simone Sestili'
 
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.viewcode',
     'sphinx.ext.autosectionlabel',
 ]
 
