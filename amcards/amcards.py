@@ -11,6 +11,7 @@ DOMAIN = 'https://amcards.com'
 
 
 class AMcardsClient:
+    """Client for AMcards API."""
     def __init__(self, access_token: str) -> None:
         self._access_token = access_token
         self.HEADERS = {
@@ -18,6 +19,12 @@ class AMcardsClient:
         }
 
     def user(self) -> User:
+        """Fetches client's AMcards user.
+
+        :return: The client's :py:class:`user <amcards.models.User>`.
+        :rtype: :py:class:`amcards.models.User`
+
+        """
         res = requests.get(url=f'{DOMAIN}/.api/v1/user/', headers=self.HEADERS)
         user_json = res.json().get('objects', [{}])[0]
 
@@ -27,6 +34,12 @@ class AMcardsClient:
         return User._from_json(user_json)
 
     def templates(self) -> List[Template]:
+        """Fetches client's AMcards templates.
+
+        :return: The client's :py:class:`templates <amcards.models.Template>`.
+        :rtype: :py:class:`amcards.models.Template`
+
+        """
         res = requests.get(url=f'{DOMAIN}/.api/v1/template/', headers=self.HEADERS)
         templates_json = res.json().get('objects', [])
 
@@ -36,6 +49,12 @@ class AMcardsClient:
         return [Template._from_json(template_json) for template_json in templates_json]
 
     def quicksends(self) -> List[Template]:
+        """Fetches client's AMcards quicksend templates.
+
+        :return: The client's :py:class:`quicksend templates <amcards.models.Template>`.
+        :rtype: :py:class:`amcards.models.Template`
+
+        """
         res = requests.get(url=f'{DOMAIN}/.api/v1/quicksendtemplate/', headers=self.HEADERS)
         templates_json = res.json().get('objects', [])
 
@@ -45,6 +64,12 @@ class AMcardsClient:
         return [Template._from_json(template_json) for template_json in templates_json]
 
     def campaigns(self) -> List[Campaign]:
+        """Fetches client's AMcards drip campaigns.
+
+        :return: The client's :py:class:`drip campaigns <amcards.models.Campaign>`.
+        :rtype: :py:class:`amcards.models.Campaign`
+
+        """
         res = requests.get(url=f'{DOMAIN}/.api/v1/campaign/', headers=self.HEADERS)
         campaigns_json = res.json().get('objects', [])
 
@@ -60,7 +85,16 @@ class AMcardsClient:
         shipping_address: dict,
         return_address: dict = None,
         send_date: str = None
-    ):
+    ) -> CardResponse:
+        """Attempt to send a card.
+
+        :param str or int template_id: desc
+        :param str initiator: desc
+
+        :return: AMcards' :py:class:`response <amcards.models.CardResponse>` for sending a single card.
+        :rtype: :py:class:`amcards.models.CardResponse`
+
+        """
         # Validate shipping address
         missings = helpers.get_missing_required_shipping_address_fields(shipping_address)
         if missings:
@@ -112,7 +146,16 @@ class AMcardsClient:
         shipping_address: dict,
         return_address: dict = None,
         send_date: str = None
-    ):
+    ) -> CampaignResponse:
+        """Attempt to send a drip campaign.
+
+        :param str or int campaign_id: desc
+        :param str initiator: desc
+
+        :return: AMcards' :py:class:`response <amcards.models.CampaignResponse>` for sending a single drip campaign.
+        :rtype: :py:class:`amcards.models.CampaignResponse`
+
+        """
         # Validate shipping address
         missings = helpers.get_missing_required_shipping_address_fields(shipping_address)
         if missings:
