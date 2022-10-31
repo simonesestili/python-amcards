@@ -7,7 +7,7 @@ def README():
 
 setup(
     name='python-amcards',
-    version='0.0.2',
+    version='0.1.0',
     description='A wrapper for the AMcards API.',
     long_description=README(),
     long_description_content_type='text/markdown',
