@@ -12,14 +12,14 @@ REQUIRED_SHIPPING_ADDRESS_FIELDS = {
 
 CARD_OPTIONAL_SHIPPING_ADDRESS_FIELDS = {
     'organization',
-    'phone_number',
-    'birth_date',
-    'anniversary_date',
     'third_party_contact_id',
 }
 
 CAMPAIGN_OPTIONAL_SHIPPING_ADDRESS_FIELDS = {
     'organization',
+    'phone_number',
+    'birth_date',
+    'anniversary_date',
     'third_party_contact_id',
 }
 
