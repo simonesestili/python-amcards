@@ -22,22 +22,74 @@ class User:
         domestic_postage_countries: set,
         greeting_card_cost: int,
     ) -> None:
-        self.first_name = first_name
-        self.last_name = last_name
-        self.credits = credits
-        self.date_joined = date_joined
-        self.address_line_1 = address_line_1
-        self.city = city
-        self.state = state
-        self.postal_code = postal_code
-        self.country = country
-        self.domestic_postage_cost = domestic_postage_cost
-        self.international_postage_cost = international_postage_cost
-        self.domestic_postage_countries = domestic_postage_countries
-        self.greeting_card_cost = greeting_card_cost
+        self._first_name = first_name
+        self._last_name = last_name
+        self._credits = credits
+        self._date_joined = date_joined
+        self._address_line_1 = address_line_1
+        self._city = city
+        self._state = state
+        self._postal_code = postal_code
+        self._country = country
+        self._domestic_postage_cost = domestic_postage_cost
+        self._international_postage_cost = international_postage_cost
+        self._domestic_postage_countries = domestic_postage_countries
+        self._greeting_card_cost = greeting_card_cost
+
+    @property
+    def first_name(self) -> str:
+        return self._first_name
+
+    @property
+    def last_name(self) -> str:
+        return self._last_name
+
+    @property
+    def credits(self) -> int:
+        return self._credits
+
+    @property
+    def date_joined(self) -> datetime:
+        return self._date_joined
+
+    @property
+    def address_line_1(self) -> str:
+        return self._address_line_1
+
+    @property
+    def city(self) -> str:
+        return self._city
+
+    @property
+    def state(self) -> str:
+        return self._state
+
+    @property
+    def postal_code(self) -> str:
+        return self._postal_code
+
+    @property
+    def country(self) -> str:
+        return self._country
+
+    @property
+    def domestic_postage_cost(self) -> int:
+        return self._domestic_postage_cost
+
+    @property
+    def international_postage_cost(self) -> int:
+        return self._international_postage_cost
+
+    @property
+    def domestic_postage_countries(self) -> set:
+        return self._domestic_postage_countries
+
+    @property
+    def greeting_card_cost(self) -> int:
+        return self._greeting_card_cost
 
     @classmethod
-    def from_json(cls, json: dict):
+    def _from_json(cls, json: dict):
         return cls(
             first_name=json['first_name'],
             last_name=json['last_name'],
@@ -100,20 +152,40 @@ class Gift:
         self,
         name: str,
         thumbnail: str,
-        cost: int,
+        base_cost: int,
         shipping_and_handling_cost: int,
     ) -> None:
-        self.name = name
-        self.thumbnail = thumbnail
-        self.cost = cost
-        self.shipping_and_handling_cost = shipping_and_handling_cost
+        self._name = name
+        self._thumbnail = thumbnail
+        self._base_cost = base_cost
+        self._shipping_and_handling_cost = shipping_and_handling_cost
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def thumbnail(self) -> str:
+        return self._thumbnail
+
+    @property
+    def base_cost(self) -> int:
+        return self._base_cost
+
+    @property
+    def shipping_and_handling_cost(self) -> int:
+        return self._shipping_and_handling_cost
+
+    @property
+    def total_cost(self) -> int:
+        return self._base_cost + self._shipping_and_handling_cost
 
     @classmethod
-    def from_json(cls, json: dict):
+    def _from_json(cls, json: dict):
         return cls(
             name=json['gift_name'],
             thumbnail=json['image'],
-            cost=json['price'],
+            base_cost=json['price'],
             shipping_and_handling_cost=json['shipping_and_handling'],
         )
 
@@ -135,20 +207,36 @@ class Template:
         thumbnail: str,
         gifts: List[Gift],
     ) -> None:
-        self.id = id
-        self.name = name
-        self.thumbnail = thumbnail
-        self.gifts = gifts
+        self._id = id
+        self._name = name
+        self._thumbnail = thumbnail
+        self._gifts = gifts
+
+    @property
+    def id(self) -> int:
+        return self._id
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def thumbnail(self) -> str:
+        return self._thumbnail
+
+    @property
+    def gifts(self) -> List[Gift]:
+        return self._gifts
 
     @classmethod
-    def from_json(cls, json: dict):
+    def _from_json(cls, json: dict):
         return cls(
             id=json['id'],
             name=json['name'],
             thumbnail=json['thumbnail'],
-            gifts=[Gift.from_json(gift_json) for gift_json in json['gifts']],
+            gifts=[Gift._from_json(gift_json) for gift_json in json['gifts']],
         )
-    
+
     def __repr__(self) -> str:
         return (
             '('
@@ -166,12 +254,24 @@ class Campaign:
         name: str,
         send_if_duplicate: bool = False,
     ) -> None:
-        self.id = id
-        self.name = name
-        self.send_if_duplicate = send_if_duplicate
+        self._id = id
+        self._name = name
+        self._send_if_duplicate = send_if_duplicate
+
+    @property
+    def id(self) -> int:
+        return self._id
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def send_if_duplicate(self) -> bool:
+        return self._send_if_duplicate
 
     @classmethod
-    def from_json(cls, json: dict):
+    def _from_json(cls, json: dict):
         return cls(
             id=json['id'],
             name=json['title'],
@@ -194,12 +294,24 @@ class CardResponse:
         total_cost: int,
         user_email: str,
     ) -> None:
-        self.card_id = card_id
-        self.total_cost = total_cost
-        self.user_email = user_email
+        self._card_id = card_id
+        self._total_cost = total_cost
+        self._user_email = user_email
+
+    @property
+    def card_id(self) -> int:
+        return self._card_id
+
+    @property
+    def total_cost(self) -> int:
+        return self._total_cost
+
+    @property
+    def user_email(self) -> str:
+        return self._user_email
 
     @classmethod
-    def from_json(cls, json: dict):
+    def _from_json(cls, json: dict):
         return cls(
             card_id=json['card'],
             total_cost=json['total_cost'],
@@ -213,12 +325,24 @@ class CampaignResponse:
         card_ids: List[int],
         user_email: str,
     ) -> None:
-        self.mailing_id = mailing_id
-        self.card_ids = card_ids
-        self.user_email = user_email
+        self._mailing_id = mailing_id
+        self._card_ids = card_ids
+        self._user_email = user_email
+
+    @property
+    def mailing_id(self) -> int:
+        return self._mailing_id
+
+    @property
+    def card_ids(self) -> List[int]:
+        return self._card_ids
+
+    @property
+    def user_email(self) -> str:
+        return self._user_email
 
     @classmethod
-    def from_json(cls, json: dict):
+    def _from_json(cls, json: dict):
         return cls(
             mailing_id=json['mailing'],
             card_ids=json['cards'],

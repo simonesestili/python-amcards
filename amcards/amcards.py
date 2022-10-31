@@ -24,7 +24,7 @@ class AMcardsClient:
         if not user_json:
             return None
 
-        return User.from_json(user_json)
+        return User._from_json(user_json)
 
     def templates(self) -> List[Template]:
         res = requests.get(url=f'{DOMAIN}/.api/v1/template/', headers=self.HEADERS)
@@ -33,7 +33,7 @@ class AMcardsClient:
         if not templates_json:
             return None
 
-        return [Template.from_json(template_json) for template_json in templates_json]
+        return [Template._from_json(template_json) for template_json in templates_json]
 
     def quicksends(self) -> List[Template]:
         res = requests.get(url=f'{DOMAIN}/.api/v1/quicksendtemplate/', headers=self.HEADERS)
@@ -42,7 +42,7 @@ class AMcardsClient:
         if not templates_json:
             return None
 
-        return [Template.from_json(template_json) for template_json in templates_json]
+        return [Template._from_json(template_json) for template_json in templates_json]
 
     def campaigns(self) -> List[Campaign]:
         res = requests.get(url=f'{DOMAIN}/.api/v1/campaign/', headers=self.HEADERS)
@@ -51,7 +51,7 @@ class AMcardsClient:
         if not campaigns_json:
             return None
 
-        return [Campaign.from_json(campaign_json) for campaign_json in campaigns_json]
+        return [Campaign._from_json(campaign_json) for campaign_json in campaigns_json]
 
     def send_card(
         self,
@@ -103,7 +103,7 @@ class AMcardsClient:
                 raise exceptions.ForbiddenTemplateError(f'Clients\' user does not own given template with id of {template_id}')
 
         res_json = res.json()
-        return CardResponse.from_json(res_json)
+        return CardResponse._from_json(res_json)
 
     def send_campaign(
         self,
@@ -170,4 +170,4 @@ class AMcardsClient:
                 raise exceptions.DuplicateCampaignError('Duplicates were detected, no cards were scheduled')
 
         res_json = res.json()
-        return CampaignResponse.from_json(res_json)
+        return CampaignResponse._from_json(res_json)
