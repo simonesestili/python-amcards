@@ -1,5 +1,5 @@
 # See [Read the Docs](https://python-amcards.readthedocs.io/en/latest/) for full documentation
-![Read the Docs](images/readthedocs.png)
+[![Read the Docs](images/readthedocs.png)](https://python-amcards.readthedocs.io/en/latest/)
 
 ## Installation
 To install python-amcards, simply run this command in your terminal:  
