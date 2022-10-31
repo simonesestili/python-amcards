@@ -6,6 +6,11 @@ from . import __helpers as helpers
 
 
 class User:
+    """.. _amcards.models.User:
+
+    Represents an AMcards user.
+
+    """
     def __init__(
         self,
         first_name: str,
@@ -148,6 +153,11 @@ class User:
         )
 
 class Gift:
+    """.. _amcards.models.Gift:
+
+    Represents an AMcards gift.
+
+    """
     def __init__(
         self,
         name: str,
@@ -200,6 +210,11 @@ class Gift:
         )
 
 class Template:
+    """.. _amcards.models.Template:
+
+    Represents an AMcards template.
+
+    """
     def __init__(
         self,
         id: int,
@@ -248,6 +263,11 @@ class Template:
         )
 
 class Campaign:
+    """.. _amcards.models.Campaign:
+
+    Represents an AMcards drip campaign.
+
+    """
     def __init__(
         self,
         id: int,
@@ -288,6 +308,11 @@ class Campaign:
         )
 
 class CardResponse:
+    """.. _amcards.models.CardResponse:
+
+    Represents AMcards' response for sending a single card.
+
+    """
     def __init__(
         self,
         card_id: int,
@@ -319,6 +344,11 @@ class CardResponse:
         )
 
 class CampaignResponse:
+    """.. _amcards.models.CampaignResponse:
+
+    Represents AMcards' response for sending a single drip campaign.
+
+    """
     def __init__(
         self,
         mailing_id: int,
