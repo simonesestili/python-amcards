@@ -1,6 +1,9 @@
-python_amcards.egg-info/
+docs/_build/
 __pycache__/
+*.egg-info/
+.DS_Store
 build/
+*.egg
 *.pyc
 *.swp
 *.egg
