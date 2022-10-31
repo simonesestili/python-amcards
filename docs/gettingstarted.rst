@@ -3,7 +3,7 @@ Getting Started
 
 Installation
 ------------
-To install python-amcards, simply run this command in your terminal
+To install python-amcards, simply run this command in your terminal:
 
 .. code-block::
 
@@ -11,9 +11,9 @@ To install python-amcards, simply run this command in your terminal
 
 Usage
 -----
-All interactions with the AMcards API are made through the ``AMcardsClient`` class.
+All interactions with the AMcards API are made through the :ref:`AMcardsClient <amcards.AMcardsClient>` class.
 
-First, create an ``AMcardsClient`` as follows:
+First, create an :ref:`AMcardsClient <amcards.AMcardsClient>` as follows:
 
 .. code-block::
 
