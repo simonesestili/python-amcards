@@ -39,54 +39,68 @@ class User:
 
     @property
     def first_name(self) -> str:
+        """User's first name."""
         return self._first_name
 
     @property
     def last_name(self) -> str:
+        """User's last name."""
         return self._last_name
 
     @property
     def credits(self) -> int:
+        """User's credit balance in `cents`."""
         return self._credits
 
     @property
     def date_joined(self) -> datetime:
+        """Date and time when user created their AMcards account."""
         return self._date_joined
 
     @property
     def address_line_1(self) -> str:
+        """User's primary address line (street)."""
+        """Primary address line of user."""
         return self._address_line_1
 
     @property
     def city(self) -> str:
+        """User's state."""
         return self._city
 
     @property
     def state(self) -> str:
+        """User's state/province."""
         return self._state
 
     @property
     def postal_code(self) -> str:
+        """User's postal code"""
         return self._postal_code
 
     @property
     def country(self) -> str:
+        """User's country."""
         return self._country
 
     @property
     def domestic_postage_cost(self) -> int:
+        """User's postage cost for sending cards to countries in :py:attr:`domestic_postage_countries`."""
         return self._domestic_postage_cost
 
     @property
     def international_postage_cost(self) -> int:
+        """User's postage cost for sending cards to countries not in :py:attr:`domestic_postage_countries`."""
         return self._international_postage_cost
 
     @property
     def domestic_postage_countries(self) -> set:
+        """User's countries that have a :py:attr:`domestic_postage_cost`."""
         return self._domestic_postage_countries
 
     @property
     def greeting_card_cost(self) -> int:
+        """User's base cost of a greeting card excluding postage."""
         return self._greeting_card_cost
 
     @classmethod
@@ -164,22 +178,27 @@ class Gift:
 
     @property
     def name(self) -> str:
+        """Gift's name."""
         return self._name
 
     @property
     def thumbnail(self) -> str:
+        """Gift's image thumbnail."""
         return self._thumbnail
 
     @property
     def base_cost(self) -> int:
+        """Gift's base cost."""
         return self._base_cost
 
     @property
     def shipping_and_handling_cost(self) -> int:
+        """Gift's shipping and handling cost."""
         return self._shipping_and_handling_cost
 
     @property
     def total_cost(self) -> int:
+        """Gift's total cost, including :py:attr:`base_cost` + :py:attr:`shipping_and_handling_cost`."""
         return self._base_cost + self._shipping_and_handling_cost
 
     @classmethod
@@ -217,18 +236,22 @@ class Template:
 
     @property
     def id(self) -> int:
+        """Template's unique identifier."""
         return self._id
 
     @property
     def name(self) -> str:
+        """Template's name."""
         return self._name
 
     @property
     def thumbnail(self) -> str:
+        """Template's image thumbnail."""
         return self._thumbnail
 
     @property
     def gifts(self) -> List[Gift]:
+        """List of template's :py:class:`gifts <amcards.models.Gift>` (could be an empty list)."""
         return self._gifts
 
     @classmethod
@@ -264,14 +287,17 @@ class Campaign:
 
     @property
     def id(self) -> int:
+        """Drip campaign's unique identifier."""
         return self._id
 
     @property
     def name(self) -> str:
+        """Drip campaign's name."""
         return self._name
 
     @property
     def send_if_duplicate(self) -> bool:
+        """If True, AMcards will not attempt to detect and prevent duplicates. Otherwise, if this campaign has been previously sent to a contact, further campaign send attempts to the same contact will be prevented."""
         return self._send_if_duplicate
 
     @classmethod
@@ -305,14 +331,17 @@ class CardResponse:
 
     @property
     def card_id(self) -> int:
+        """Unique id for the :py:class:`card <amcards.models.Card>` created."""
         return self._card_id
 
     @property
     def total_cost(self) -> int:
+        """Total cost the client's user was charged in `cents`."""
         return self._total_cost
 
     @property
     def user_email(self) -> str:
+        """Client's user email."""
         return self._user_email
 
     @classmethod
@@ -337,14 +366,17 @@ class CampaignResponse:
 
     @property
     def mailing_id(self) -> int:
+        """Unique id for the :py:class:`mailing <amcards.models.Mailing>` object created."""
         return self._mailing_id
 
     @property
     def card_ids(self) -> List[int]:
+        """List of unique ids for the :py:class:`cards <amcards.models.Card>` created."""
         return self._card_ids
 
     @property
     def user_email(self) -> str:
+        """Client's user email."""
         return self._user_email
 
     @classmethod
