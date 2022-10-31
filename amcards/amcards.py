@@ -22,7 +22,7 @@ class AMcardsClient:
         """Fetches client's AMcards user.
 
         :return: The client's :py:class:`user <amcards.models.User>`.
-        :rtype: :py:class:`amcards.models.User`
+        :rtype: :py:class:`User <amcards.models.User>`
 
         """
         res = requests.get(url=f'{DOMAIN}/.api/v1/user/', headers=self.HEADERS)
@@ -37,7 +37,7 @@ class AMcardsClient:
         """Fetches client's AMcards templates.
 
         :return: The client's :py:class:`templates <amcards.models.Template>`.
-        :rtype: :py:class:`amcards.models.Template`
+        :rtype: List[:py:class:`Template <amcards.models.Template>`]
 
         """
         res = requests.get(url=f'{DOMAIN}/.api/v1/template/', headers=self.HEADERS)
@@ -52,7 +52,7 @@ class AMcardsClient:
         """Fetches client's AMcards quicksend templates.
 
         :return: The client's :py:class:`quicksend templates <amcards.models.Template>`.
-        :rtype: :py:class:`amcards.models.Template`
+        :rtype: List[:py:class:`Template <amcards.models.Template>`]
 
         """
         res = requests.get(url=f'{DOMAIN}/.api/v1/quicksendtemplate/', headers=self.HEADERS)
@@ -67,7 +67,7 @@ class AMcardsClient:
         """Fetches client's AMcards drip campaigns.
 
         :return: The client's :py:class:`drip campaigns <amcards.models.Campaign>`.
-        :rtype: :py:class:`amcards.models.Campaign`
+        :rtype: List[:py:class:`Campaign <amcards.models.Campaign>`]
 
         """
         res = requests.get(url=f'{DOMAIN}/.api/v1/campaign/', headers=self.HEADERS)
@@ -88,11 +88,48 @@ class AMcardsClient:
     ) -> CardResponse:
         """Attempt to send a card.
 
-        :param str or int template_id: desc
-        :param str initiator: desc
+        :param str or int template_id: Unique id for the :py:class:`template <amcards.models.Template>` you are sending.
+        :param str initiator: Unique identifier of client's user so if multiple users use a single AMcards.com account, a card can be identified per person.
+        :param dict shipping_address: Dict of shipping details. Here's an example how the dict might look, make sure you include all of the `required` keys:
+
+            .. code-block::
+
+                {
+                    'first_name': 'Ralph',
+                    'last_name': 'Mullins',
+                    'address_line_1': '2285 Reppert Road',
+                    'city': 'Southfield',
+                    'state': 'MI',
+                    'postal_code': '48075',
+                    'country': 'US',
+                    'organization': 'Google',                # OPTIONAL
+                    'third_party_contact_id': 'crmid1453131' # OPTIONAL
+                }
+
+        :param Optional[dict] return_address: Dict of return details that will override the client's AMcards user default return details. Here's an example how the dict might look, all of the keys are optional:
+
+            .. code-block::
+
+                {
+                    'first_name': 'Ralph',                   # OPTIONAL
+                    'last_name': 'Mullins',                  # OPTIONAL
+                    'address_line_1': '2285 Reppert Road',   # OPTIONAL
+                    'city': 'Southfield',                    # OPTIONAL
+                    'state': 'MI',                           # OPTIONAL
+                    'postal_code': '48075',                  # OPTIONAL
+                    'country': 'US',                         # OPTIONAL
+                }
+
+        :param Optional[str] send_date: The date the card should be sent, If not specified, the card will be scheduled for the following day. The format should be: ``"YYYY-MM-DD"``.
 
         :return: AMcards' :py:class:`response <amcards.models.CardResponse>` for sending a single card.
-        :rtype: :py:class:`amcards.models.CardResponse`
+        :rtype: :py:class:`CardResponse <amcards.models.CardResponse>`
+
+        :raises AuthenticationError: When the client's ``access_token`` is invalid.
+        :raises ForbiddenTemplateError: When the client does not own the :py:class:`template <amcards.models.Template>` specified by ``template_id``.
+        :raises ShippingAddressError: When ``shipping_address`` is missing some `required` keys.
+        :raises DateFormatError: When one of the dates provided is not in ``"YYYY-MM-DD"`` format.
+        :raises InsufficientCreditsError: When the client's user has insufficient credits in their balance.
 
         """
         # Validate shipping address
@@ -149,11 +186,53 @@ class AMcardsClient:
     ) -> CampaignResponse:
         """Attempt to send a drip campaign.
 
-        :param str or int campaign_id: desc
-        :param str initiator: desc
+        :param str or int campaign_id: Unique id for the :py:class:`drip campaign <amcards.models.Campaign>` you are sending.
+        :param str initiator: Unique identifier of client's user so if multiple users use a single AMcards.com account, a drip campaign can be identified per person.
+        :param dict shipping_address: Dict of shipping details. Here's an example how the dict might look, make sure you include all of the `required` keys:
+
+            .. code-block::
+
+                {
+                    'first_name': 'Ralph',
+                    'last_name': 'Mullins',
+                    'address_line_1': '2285 Reppert Road',
+                    'city': 'Southfield',
+                    'state': 'MI',
+                    'postal_code': '48075',
+                    'country': 'US',
+                    'organization': 'Google',                # OPTIONAL
+                    'phone_number': '15556667777',           # OPTIONAL
+                    'birth_date': '2003-12-25',              # OPTIONAL
+                    'anniversary_date': '2022-10-31',        # OPTIONAL
+                    'third_party_contact_id': 'crmid1453131' # OPTIONAL
+                }
+
+        :param Optional[dict] return_address: Dict of return details that will override the client's AMcards user default return details. Here's an example how the dict might look, all of the keys are optional:
+
+            .. code-block::
+
+                {
+                    'first_name': 'Ralph',                   # OPTIONAL
+                    'last_name': 'Mullins',                  # OPTIONAL
+                    'address_line_1': '2285 Reppert Road',   # OPTIONAL
+                    'city': 'Southfield',                    # OPTIONAL
+                    'state': 'MI',                           # OPTIONAL
+                    'postal_code': '48075',                  # OPTIONAL
+                    'country': 'US',                         # OPTIONAL
+                }
+
+        :param Optional[str] send_date: The date the drip campaign should be sent, in ``"YYYY-MM-DD"`` format. If not specified, the drip campaign will be scheduled for the following day.
 
         :return: AMcards' :py:class:`response <amcards.models.CampaignResponse>` for sending a single drip campaign.
-        :rtype: :py:class:`amcards.models.CampaignResponse`
+        :rtype: :py:class:`CampaignResponse <amcards.models.CampaignResponse>`
+
+        :raises AuthenticationError: When the client's ``access_token`` is invalid.
+        :raises ForbiddenCampaignError: When the client does not own the :py:class:`campaign <amcards.models.Campaign>` specified by ``campaign_id``.
+        :raises ShippingAddressError: When ``shipping_address`` is missing some `required` keys.
+        :raises DateFormatError: When one of the dates provided is not in ``"YYYY-MM-DD"`` format.
+        :raises PhoneFormatError: When the ``phone_number`` is not a digit string of length 10.
+        :raises InsufficientCreditsError: When the client's user has insufficient credits in their balance.
+        :raises DuplicateCampaignError: When AMcards detects this :py:class:`campaign <amcards.models.Campaign>` specified by ``campaign_id`` is a duplicate and ``send_if_duplicate`` in :py:class:`Campaign <amcards.models.Campaign>` is ``False``.
 
         """
         # Validate shipping address
