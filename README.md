@@ -4,7 +4,7 @@
 ## Installation
 To install python-amcards, simply run this command in your terminal:  
 ```
-$ pip install requests
+$ pip install python-amcards
 ```
 
 ## Usage
