@@ -317,6 +317,20 @@ class Campaign:
             ')'
         )
 
+class Card:
+    """Represents an AMcards card."""
+    def __init__(
+        self,
+    ) -> None:
+        pass
+
+class Mailing:
+    """Represents an AMcards mailing."""
+    def __init__(
+        self,
+    ) -> None:
+        pass
+
 class CardResponse:
     """Represents AMcards' response for sending a single card."""
     def __init__(
@@ -366,7 +380,7 @@ class CampaignResponse:
 
     @property
     def mailing_id(self) -> int:
-        """Unique id for the :py:class:`mailing <amcards.models.Mailing>` object created."""
+        """Unique id for the :py:class:`mailing <amcards.models.Mailing>` created."""
         return self._mailing_id
 
     @property
