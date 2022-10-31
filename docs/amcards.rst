@@ -9,18 +9,18 @@ amcards.AMcardsClient
    :undoc-members:
    :show-inheritance:
 
-amcards.exceptions
--------------------------
-
-.. automodule:: amcards.exceptions
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 amcards.models
 ---------------------
 
 .. automodule:: amcards.models
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+amcards.exceptions
+-------------------------
+
+.. automodule:: amcards.exceptions
    :members:
    :undoc-members:
    :show-inheritance:
