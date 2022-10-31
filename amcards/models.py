@@ -279,7 +279,7 @@ class Campaign:
         self,
         id: int,
         name: str,
-        send_if_duplicate: bool = False,
+        send_if_duplicate: bool,
     ) -> None:
         self._id = id
         self._name = name
