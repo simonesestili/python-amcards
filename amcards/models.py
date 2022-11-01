@@ -188,17 +188,17 @@ class Gift:
 
     @property
     def base_cost(self) -> int:
-        """Gift's base cost."""
+        """Gift's base cost in `cents`."""
         return self._base_cost
 
     @property
     def shipping_and_handling_cost(self) -> int:
-        """Gift's shipping and handling cost."""
+        """Gift's shipping and handling cost in `cents`."""
         return self._shipping_and_handling_cost
 
     @property
     def total_cost(self) -> int:
-        """Gift's total cost, including :py:attr:`base_cost` + :py:attr:`shipping_and_handling_cost`."""
+        """Gift's total cost, including :py:attr:`base_cost` + :py:attr:`shipping_and_handling_cost` in `cents`."""
         return self._base_cost + self._shipping_and_handling_cost
 
     @classmethod
@@ -234,6 +234,7 @@ class Template:
         self._name = name
         self._thumbnail = thumbnail
         self._gifts = gifts
+        self._gifts_total = sum(gift.total_cost for gift in gifts)
 
     @property
     def id(self) -> int:
@@ -254,6 +255,11 @@ class Template:
     def gifts(self) -> List[Gift]:
         """List of template's :py:class:`gifts <amcards.models.Gift>` (could be an empty list)."""
         return self._gifts
+
+    @property
+    def gifts_total(self) -> int:
+        """Sum of gifts' total costs in `cents`."""
+        return self._gifts_total
 
     @classmethod
     def _from_json(cls, json: dict):
