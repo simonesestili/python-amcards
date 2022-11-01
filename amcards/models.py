@@ -304,10 +304,12 @@ class CardResponse:
         card_id: int,
         total_cost: int,
         user_email: str,
+        message: str,
     ) -> None:
         self._card_id = card_id
         self._total_cost = total_cost
         self._user_email = user_email
+        self._message = message
 
     __repr__ = lambda self: helpers.repr(self)
 
@@ -326,12 +328,18 @@ class CardResponse:
         """Client's user email."""
         return self._user_email
 
+    @property
+    def message(self) -> str:
+        """AMcards' response message for sending a single card."""
+        return self._message
+
     @classmethod
     def _from_json(cls, json: dict):
         return cls(
             card_id=json['card'],
             total_cost=json['total_cost'],
             user_email=json['user'],
+            message=json['message'],
         )
 
 class CampaignResponse:
@@ -341,10 +349,12 @@ class CampaignResponse:
         mailing_id: int,
         card_ids: List[int],
         user_email: str,
+        message: str,
     ) -> None:
         self._mailing_id = mailing_id
         self._card_ids = card_ids
         self._user_email = user_email
+        self._message = message
 
     __repr__ = lambda self: helpers.repr(self)
 
@@ -363,10 +373,16 @@ class CampaignResponse:
         """Client's user email."""
         return self._user_email
 
+    @property
+    def message(self) -> str:
+        """Represents AMcards' response message for sending a single drip campaign."""
+        return self._message
+
     @classmethod
     def _from_json(cls, json: dict):
         return cls(
             mailing_id=json['mailing'],
             card_ids=json['cards'],
             user_email=json['user'],
+            message=json['message'],
         )
