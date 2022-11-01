@@ -81,3 +81,7 @@ def sanitize_return_address(return_address: dict) -> dict:
         if optional not in return_address: continue
         sanitized_return_address[optional] = return_address[optional]
     return sanitized_return_address
+
+def repr(cls):
+    props = [(prop, getattr(cls, prop)) for prop in dir(cls) if not prop.startswith('_')]
+    return '(' + ', '.join([f'{k}={v}' for k, v in props]) + ')'

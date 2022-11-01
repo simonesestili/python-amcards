@@ -37,6 +37,8 @@ class User:
         self._domestic_postage_countries = domestic_postage_countries
         self._greeting_card_cost = greeting_card_cost
 
+    __repr__ = lambda self: helpers.repr(self)
+
     @property
     def first_name(self) -> str:
         """User's first name."""
@@ -157,6 +159,8 @@ class Gift:
         self._base_cost = base_cost
         self._shipping_and_handling_cost = shipping_and_handling_cost
 
+    __repr__ = lambda self: helpers.repr(self)
+
     @property
     def name(self) -> str:
         """Gift's name."""
@@ -206,6 +210,8 @@ class Template:
         self._gifts = gifts
         self._gifts_total = sum(gift.total_cost for gift in gifts)
 
+    __repr__ = lambda self: helpers.repr(self)
+
     @property
     def id(self) -> int:
         """Template's unique identifier."""
@@ -251,6 +257,8 @@ class Campaign:
         self._id = id
         self._name = name
         self._send_if_duplicate = send_if_duplicate
+
+    __repr__ = lambda self: helpers.repr(self)
 
     @property
     def id(self) -> int:
@@ -301,6 +309,8 @@ class CardResponse:
         self._total_cost = total_cost
         self._user_email = user_email
 
+    __repr__ = lambda self: helpers.repr(self)
+
     @property
     def card_id(self) -> int:
         """Unique id for the :py:class:`card <amcards.models.Card>` created."""
@@ -335,6 +345,8 @@ class CampaignResponse:
         self._mailing_id = mailing_id
         self._card_ids = card_ids
         self._user_email = user_email
+
+    __repr__ = lambda self: helpers.repr(self)
 
     @property
     def mailing_id(self) -> int:
