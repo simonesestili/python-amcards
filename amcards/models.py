@@ -37,7 +37,7 @@ class User:
         self._domestic_postage_countries = domestic_postage_countries
         self._greeting_card_cost = greeting_card_cost
 
-    __repr__ = lambda self: helpers.repr(self)
+    __repr__ = helpers.repr
 
     @property
     def first_name(self) -> str:
@@ -159,7 +159,7 @@ class Gift:
         self._base_cost = base_cost
         self._shipping_and_handling_cost = shipping_and_handling_cost
 
-    __repr__ = lambda self: helpers.repr(self)
+    __repr__ = helpers.repr
 
     @property
     def name(self) -> str:
@@ -210,7 +210,7 @@ class Template:
         self._gifts = gifts
         self._gifts_total = sum(gift.total_cost for gift in gifts)
 
-    __repr__ = lambda self: helpers.repr(self)
+    __repr__ = helpers.repr
 
     @property
     def id(self) -> int:
@@ -258,7 +258,7 @@ class Campaign:
         self._name = name
         self._send_if_duplicate = send_if_duplicate
 
-    __repr__ = lambda self: helpers.repr(self)
+    __repr__ = helpers.repr
 
     @property
     def id(self) -> int:
@@ -313,7 +313,7 @@ class CardResponse:
         self._message = message
         self._shipping_address = shipping_address
 
-    __repr__ = lambda self: helpers.repr(self)
+    __repr__ = helpers.repr
 
     @property
     def card_id(self) -> int:
@@ -366,7 +366,7 @@ class CampaignResponse:
         self._message = message
         self._shipping_address = shipping_address
 
-    __repr__ = lambda self: helpers.repr(self)
+    __repr__ = helpers.repr
 
     @property
     def mailing_id(self) -> int:
