@@ -215,8 +215,9 @@ class Gift:
             '('
             f'name={self.name}, '
             f'thumbnail={self.thumbnail}, '
-            f'cost={self.cost}, '
-            f'shipping_and_handling_cost={self.shipping_and_handling_cost}'
+            f'base_cost={self.base_cost}, '
+            f'shipping_and_handling_cost={self.shipping_and_handling_cost}, '
+            f'total_cost={self.total_cost}'
             ')'
         )
 
