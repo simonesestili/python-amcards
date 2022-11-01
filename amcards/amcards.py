@@ -174,7 +174,9 @@ class AMcardsClient:
                 raise exceptions.ForbiddenTemplateError(f'Clients\' user does not own given template with id of {template_id}')
 
         res_json = res.json()
-        return CardResponse._from_json(res_json)
+        return CardResponse._from_json(res_json | {
+            'shipping_address': shipping_address,
+        })
 
     def send_campaign(
         self,
@@ -292,4 +294,6 @@ class AMcardsClient:
                 raise exceptions.DuplicateCampaignError('Duplicates were detected, no cards were scheduled')
 
         res_json = res.json()
-        return CampaignResponse._from_json(res_json)
+        return CampaignResponse._from_json(res_json | {
+            'shipping_address': shipping_address,
+        })

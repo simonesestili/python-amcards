@@ -305,11 +305,13 @@ class CardResponse:
         total_cost: int,
         user_email: str,
         message: str,
+        shipping_address: dict,
     ) -> None:
         self._card_id = card_id
         self._total_cost = total_cost
         self._user_email = user_email
         self._message = message
+        self._shipping_address = shipping_address
 
     __repr__ = lambda self: helpers.repr(self)
 
@@ -333,6 +335,11 @@ class CardResponse:
         """AMcards' response message for sending a single card."""
         return self._message
 
+    @property
+    def shipping_address(self) -> dict:
+        """Shipping address for this CardResponse."""
+        return self._shipping_address
+
     @classmethod
     def _from_json(cls, json: dict):
         return cls(
@@ -340,6 +347,7 @@ class CardResponse:
             total_cost=json['total_cost'],
             user_email=json['user'],
             message=json['message'],
+            shipping_address=json['shipping_address'],
         )
 
 class CampaignResponse:
@@ -350,11 +358,13 @@ class CampaignResponse:
         card_ids: List[int],
         user_email: str,
         message: str,
+        shipping_address: dict,
     ) -> None:
         self._mailing_id = mailing_id
         self._card_ids = card_ids
         self._user_email = user_email
         self._message = message
+        self._shipping_address = shipping_address
 
     __repr__ = lambda self: helpers.repr(self)
 
@@ -378,6 +388,11 @@ class CampaignResponse:
         """Represents AMcards' response message for sending a single drip campaign."""
         return self._message
 
+    @property
+    def shipping_address(self) -> dict:
+        """Shipping address for this CampaignResponse."""
+        return self._shipping_address
+
     @classmethod
     def _from_json(cls, json: dict):
         return cls(
@@ -385,4 +400,5 @@ class CampaignResponse:
             card_ids=json['cards'],
             user_email=json['user'],
             message=json['message'],
+            shipping_address=json['shipping_address'],
         )
