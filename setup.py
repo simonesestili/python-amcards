@@ -7,14 +7,15 @@ def README():
 
 setup(
     name='python-amcards',
-    version='1.0.0',
+    version='1.0.3',
     description='A wrapper for the AMcards API.',
     long_description=README(),
     long_description_content_type='text/markdown',
     author='Simone Sestili',
     author_email='simone.sestili@amcards.com',
     url='https://github.com/simonesestili/python-amcards',
-    py_modules=['amcards'],
+    packages=['amcards'],
+    package_dir={'amcards': 'amcards'},
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
