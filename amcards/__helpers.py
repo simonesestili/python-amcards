@@ -33,6 +33,12 @@ OPTIONAL_RETURN_ADDRESS_FIELDS = {
     'country',
 }
 
+def today() -> str:
+    today = datetime.today()
+    yyyy = today.year
+    mm, dd = map(lambda x: str(x).zfill(2), (today.month, today.day))
+    return f'{yyyy}-{mm}-{dd}'
+
 def to_datetime(datetime_str: str) -> datetime:
     return datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M:%S.%f') 
 
