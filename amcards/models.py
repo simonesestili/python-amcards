@@ -121,25 +121,6 @@ class User:
             greeting_card_cost=json['product_pricing_info']['5x7greetingcard']
         )
 
-    def __repr__(self) -> str:
-        return (
-            '('
-            f'first_name={self.first_name}, '
-            f'last_name={self.last_name}, '
-            f'credits={self.credits}, '
-            f'date_joined={self.date_joined}, '
-            f'address_line_1={self.address_line_1}, '
-            f'city={self.city}, '
-            f'state={self.state}, '
-            f'postal_code={self.postal_code}, '
-            f'country={self.country}, '
-            f'domestic_postage_cost={self.domestic_postage_cost}, '
-            f'international_postage_cost={self.international_postage_cost}, '
-            f'domestic_postage_countries={self.domestic_postage_countries}, '
-            f'greeting_card_cost={self.greeting_card_cost}'
-            ')'
-        )
-
     def __str__(self) -> str:
         formatted_credits = helpers.format_cents(price_in_cents=self.credits)
         formatted_domestic_postage_cost = helpers.format_cents(price_in_cents=self.domestic_postage_cost)
@@ -210,17 +191,6 @@ class Gift:
             shipping_and_handling_cost=json['shipping_and_handling'],
         )
 
-    def __repr__(self) -> str:
-        return (
-            '('
-            f'name={self.name}, '
-            f'thumbnail={self.thumbnail}, '
-            f'base_cost={self.base_cost}, '
-            f'shipping_and_handling_cost={self.shipping_and_handling_cost}, '
-            f'total_cost={self.total_cost}'
-            ')'
-        )
-
 class Template:
     """Represents an AMcards template."""
     def __init__(
@@ -270,16 +240,6 @@ class Template:
             gifts=[Gift._from_json(gift_json) for gift_json in json['gifts']],
         )
 
-    def __repr__(self) -> str:
-        return (
-            '('
-            f'id={self.id}, '
-            f'name={self.name}, '
-            f'thumbnail={self.thumbnail}, '
-            f'gifts={self.gifts}'
-            ')'
-        )
-
 class Campaign:
     """Represents an AMcards drip campaign."""
     def __init__(
@@ -313,15 +273,6 @@ class Campaign:
             id=json['id'],
             name=json['title'],
             send_if_duplicate=json['send_even_if_duplicate'],
-        )
-
-    def __repr__(self) -> str:
-        return (
-            '('
-            f'id={self.id}, '
-            f'name={self.name}, '
-            f'send_if_duplicate={self.send_if_duplicate}'
-            ')'
         )
 
 class Card:
