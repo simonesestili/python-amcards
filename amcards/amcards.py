@@ -88,6 +88,34 @@ class AMcardsClient:
     ) -> CardResponse:
         """Attempt to send a card.
 
+            .. code-block::
+
+                >>> from amcards import AMcardsClient
+                >>> client = AMcardsClient('youraccesstoken')
+                >>> res = client.send_card(
+                ...     template_id='123',
+                ...     initiator='myintegration123',
+                ...     shipping_address={
+                ...         'first_name': 'Ralph',
+                ...         'last_name': 'Mullins',
+                ...         'address_line_1': '2285 Reppert Road',
+                ...         'city': 'Southfield',
+                ...         'state': 'MI',
+                ...         'postal_code': '48075',
+                ...         'country': 'US'
+                ...     }
+                ... )
+                >>> res.card_id
+                1522873
+                >>> res.total_cost
+                442
+                >>> res.message
+                'Card created successfully!'
+                >>> res.user_email
+                'example@example.com'
+                >>> res.shipping_address
+                {'last_name': 'Mullins', 'address_line_1': '2285 Reppert Road', 'first_name': 'Ralph', 'country': 'US', 'state': 'MI', 'postal_code': '48075', 'city': 'Southfield'}
+
         :param str or int template_id: Unique id for the :py:class:`template <amcards.models.Template>` you are sending.
         :param str initiator: Unique identifier of client's user so if multiple users use a single AMcards.com account, a card can be identified per person.
         :param dict shipping_address: Dict of shipping details. Here's an example how the dict might look, make sure you include all of the `required` keys:
@@ -187,6 +215,34 @@ class AMcardsClient:
         send_date: str = None
     ) -> CampaignResponse:
         """Attempt to send a drip campaign.
+
+            .. code-block::
+
+                >>> from amcards import AMcardsClient
+                >>> client = AMcardsClient('youraccesstoken')
+                >>> res = client.send_campaign(
+                ...     campaign_id='123',
+                ...     initiator='myintegration123',
+                ...     shipping_address={
+                ...         'first_name': 'Ralph',
+                ...         'last_name': 'Mullins',
+                ...         'address_line_1': '2285 Reppert Road',
+                ...         'city': 'Southfield',
+                ...         'state': 'MI',
+                ...         'postal_code': '48075',
+                ...         'country': 'US'
+                ...     }
+                ... )
+                >>> res.card_ids
+                [1528871, 1528872]
+                >>> res.mailing_id
+                29693
+                >>> res.message
+                'Thanks! Your cards have been scheduled and $8.84 was debited from your credits.'
+                >>> res.user_email
+                'example@example.com'
+                >>> res.shipping_address
+                {'country': 'US', 'state': 'MI', 'postal_code': '48075', 'first_name': 'Ralph', 'city': 'Southfield', 'address_line_1': '2285 Reppert Road', 'last_name': 'Mullins'}
 
         :param str or int campaign_id: Unique id for the :py:class:`drip campaign <amcards.models.Campaign>` you are sending.
         :param str initiator: Unique identifier of client's user so if multiple users use a single AMcards.com account, a drip campaign can be identified per person.
@@ -308,6 +364,46 @@ class AMcardsClient:
         send_if_error: bool = False,
     ) -> CardsResponse:
         """Attempt to send multiple cards.
+
+            .. code-block::
+
+                >>> from amcards import AMcardsClient
+                >>> client = AMcardsClient('youraccesstoken')
+                >>> res = client.send_cards(
+                ...     template_id='123',
+                ...     initiator='myintegration123',
+                ...     shipping_addresses=[
+                ...         {
+                ...             'first_name': 'Ralph',
+                ...             'last_name': 'Mullins',
+                ...             'address_line_1': '2285 Reppert Road',
+                ...             'city': 'Southfield',
+                ...             'state': 'MI',
+                ...             'postal_code': '48075',
+                ...             'country': 'US',
+                ...             'organization': 'Google',
+                ...             'third_party_contact_id': 'crmid1453131'
+                ...         },
+                ...         {
+                ...             'first_name': 'Keith',
+                ...             'last_name': 'May',
+                ...             'address_line_1': '364 Spruce Drive',
+                ...             'city': 'Philadelphia',
+                ...             'state': 'PA',
+                ...             'postal_code': '19107',
+                ...             'country': 'US'
+                ...         }
+                ...     ]
+                ... )
+                >>> res.mailing_id
+                29694
+                >>> res.message
+                "You can check the mailing_uri. When the 'status' is '0' (aka Completed) you can then read the 'report' field for a list
+                of cards that were created. See each card's 'status' to make sure that it was created. If the status is 'fail' there will be a 'message' stating the issue with that recipient."
+                >>> res.user_email
+                'example@example.com'
+                >>> res.shipping_addresses
+                [{'country': 'US', 'state': 'MI', 'postal_code': '48075', 'first_name': 'Ralph', 'city': 'Southfield', 'address_line_1': '2285 Reppert Road', 'last_name': 'Mullins', 'organization': 'Google', 'third_party_contact_id': 'crmid1453131'}, {'country': 'US', 'state': 'PA', 'postal_code': '19107', 'first_name': 'Keith', 'city': 'Philadelphia', 'address_line_1': '364 Spruce Drive', 'last_name': 'May'}]
 
         :param str or int template_id: Unique id for the :py:class:`template <amcards.models.Template>` you are sending.
         :param str initiator: Unique identifier of client's user so if multiple users use a single AMcards.com account, a card can be identified per person.
