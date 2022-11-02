@@ -306,7 +306,7 @@ class AMcardsClient:
         return_address: dict = None,
         send_date: str = None,
         send_if_error: bool = False,
-    ) -> CardResponse:
+    ) -> CardsResponse:
         """Attempt to send multiple cards.
 
         :param str or int template_id: Unique id for the :py:class:`template <amcards.models.Template>` you are sending.
@@ -353,14 +353,14 @@ class AMcardsClient:
                 }
 
         :param Optional[str] send_date: The date the card should be sent, If not specified, the card will be scheduled for the following day. The format should be: ``"YYYY-MM-DD"``.
-        :param bool send_if_error: Defaults to False. If False, when sending cards to several recipients, if one of the card sends fails, all other card sends will be haulted. If True, only the cards that fail will be haulted, the rest will be scheduled as normarl.
+        :param bool send_if_error: Defaults to False. If False, when sending cards to several recipients, if one of the card sends fails, all other card sends will be haulted. If True, only the cards that fail will be haulted, the rest will be scheduled as normal.
 
         :return: AMcards' :py:class:`response <amcards.models.CardsResponse>` for sending multiple cards.
         :rtype: :py:class:`CardsResponse <amcards.models.CardsResponse>`
 
         :raises AuthenticationError: When the client's ``access_token`` is invalid.
         :raises ForbiddenTemplateError: When the client does not own the :py:class:`template <amcards.models.Template>` specified by ``template_id``.
-        :raises ShippingAddressError: When ``shipping_address`` is missing some `required` keys.
+        :raises ShippingAddressError: When some items in ``shipping_addresses`` are missing some `required` keys.
         :raises DateFormatError: When one of the dates provided is not in ``"YYYY-MM-DD"`` format.
         :raises InsufficientCreditsError: When the client's user has insufficient credits in their balance.
 
