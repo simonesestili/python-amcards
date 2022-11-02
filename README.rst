@@ -11,9 +11,9 @@ To install python-amcards, simply run this command in your terminal:
 
 Usage
 -----
-All interactions with the AMcards API are made through the :ref:`AMcardsClient <amcards.AMcardsClient>` class.
+All interactions with the AMcards API are made through the `AMcardsClient <https://python-amcards.readthedocs.io/en/latest/amcards.html#amcards.amcards.AMcardsClient>`_ class.
 
-First, create an :ref:`AMcardsClient <amcards.AMcardsClient>` as follows:
+First, create an `AMcardsClient <https://python-amcards.readthedocs.io/en/latest/amcards.html#amcards.amcards.AMcardsClient>`_ as follows:
 
 .. code-block::
 
@@ -22,7 +22,7 @@ First, create an :ref:`AMcardsClient <amcards.AMcardsClient>` as follows:
 
 Here ``'youraccesstoken'`` will be replaced with a string containing your AMcards access token. You can generate one `here <https://amcards.com/user/connected-applications/>`_.
 
-Now we can perform all operations supported by the :ref:`client <amcards.AMcardsClient>`.
+Now we can perform all operations supported by the `client <https://python-amcards.readthedocs.io/en/latest/amcards.html#amcards.amcards.AMcardsClient>`_.
 
 Let's try using ``send_card`` to send a card to a single recipient:
 
@@ -51,3 +51,5 @@ Let's try using ``send_card`` to send a card to a single recipient:
         'example@example.com'
         >>> res.shipping_address
         {'last_name': 'Mullins', 'address_line_1': '2285 Reppert Road', 'first_name': 'Ralph', 'country': 'US', 'state': 'MI', 'postal_code': '48075', 'city': 'Southfield'}
+
+The `AMcardsClient <https://python-amcards.readthedocs.io/en/latest/amcards.html#amcards.amcards.AMcardsClient>`_ supports many more operations, for full documentation see `Read the Docs <https://python-amcards.readthedocs.io/en/latest/>`_.

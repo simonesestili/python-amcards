@@ -2,15 +2,15 @@ from pathlib import Path
 from setuptools import setup
 
 def README():
-    with open('README.md') as f:
+    with open('README.rst') as f:
         return f.read()
 
 setup(
     name='python-amcards',
-    version='1.0.6',
+    version='1.0.8',
     description='A wrapper for the AMcards API.',
     long_description=README(),
-    long_description_content_type='text/markdown',
+    long_description_content_type='text/x-rst',
     author='Simone Sestili',
     author_email='simone.sestili@amcards.com',
     url='https://github.com/simonesestili/python-amcards',
