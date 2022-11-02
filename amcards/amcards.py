@@ -2,7 +2,7 @@ import requests
 from typing import List
 
 
-from .models import User, Template, Gift, Campaign, CardResponse, CampaignResponse
+from .models import User, Template, Gift, Campaign, CardResponse, CardsResponse, CampaignResponse
 from . import exceptions
 from . import __helpers as helpers
 
@@ -296,4 +296,124 @@ class AMcardsClient:
         res_json = res.json()
         return CampaignResponse._from_json(res_json | {
             'shipping_address': shipping_address,
+        })
+
+    def send_cards(
+        self,
+        template_id: str | int,
+        initiator: str,
+        shipping_addresses: List[dict],
+        return_address: dict = None,
+        send_date: str = None,
+        send_if_error: bool = False,
+    ) -> CardResponse:
+        """Attempt to send multiple cards.
+
+        :param str or int template_id: Unique id for the :py:class:`template <amcards.models.Template>` you are sending.
+        :param str initiator: Unique identifier of client's user so if multiple users use a single AMcards.com account, a card can be identified per person.
+        :param List[dict] shipping_addresses: List of shipping details. Here's an example how the list might look, make sure you include all of the `required` keys for each dict in the list:
+
+            .. code-block::
+
+                [
+                    {
+                        'first_name': 'Ralph',
+                        'last_name': 'Mullins',
+                        'address_line_1': '2285 Reppert Road',
+                        'city': 'Southfield',
+                        'state': 'MI',
+                        'postal_code': '48075',
+                        'country': 'US',
+                        'organization': 'Google',                # OPTIONAL
+                        'third_party_contact_id': 'crmid1453131' # OPTIONAL
+                    },
+                    {
+                        'first_name': 'Keith',
+                        'last_name': 'May',
+                        'address_line_1': '364 Spruce Drive',
+                        'city': 'Philadelphia',
+                        'state': 'PA',
+                        'postal_code': '19107',
+                        'country': 'US'
+                    }
+                ]
+
+        :param Optional[dict] return_address: Dict of return details that will override the client's AMcards user default return details. Here's an example how the dict might look, all of the keys are optional:
+
+            .. code-block::
+
+                {
+                    'first_name': 'Ralph',                   # OPTIONAL
+                    'last_name': 'Mullins',                  # OPTIONAL
+                    'address_line_1': '2285 Reppert Road',   # OPTIONAL
+                    'city': 'Southfield',                    # OPTIONAL
+                    'state': 'MI',                           # OPTIONAL
+                    'postal_code': '48075',                  # OPTIONAL
+                    'country': 'US',                         # OPTIONAL
+                }
+
+        :param Optional[str] send_date: The date the card should be sent, If not specified, the card will be scheduled for the following day. The format should be: ``"YYYY-MM-DD"``.
+        :param bool send_if_error: Defaults to False. If False, when sending cards to several recipients, if one of the card sends fails, all other card sends will be haulted. If True, only the cards that fail will be haulted, the rest will be scheduled as normarl.
+
+        :return: AMcards' :py:class:`response <amcards.models.CardsResponse>` for sending multiple cards.
+        :rtype: :py:class:`CardsResponse <amcards.models.CardsResponse>`
+
+        :raises AuthenticationError: When the client's ``access_token`` is invalid.
+        :raises ForbiddenTemplateError: When the client does not own the :py:class:`template <amcards.models.Template>` specified by ``template_id``.
+        :raises ShippingAddressError: When ``shipping_address`` is missing some `required` keys.
+        :raises DateFormatError: When one of the dates provided is not in ``"YYYY-MM-DD"`` format.
+        :raises InsufficientCreditsError: When the client's user has insufficient credits in their balance.
+
+        """
+        # Validate shipping addresses
+        for idx, shipping_address in enumerate(shipping_addresses):
+            missings = helpers.get_missing_required_shipping_address_fields(shipping_address)
+            if missings:
+                error_message = f'Missing the following required shipping address fields at shipping_addresses[{idx}]: ' + ', '.join(missings)
+                raise exceptions.ShippingAddressError(error_message)
+
+        # Validate send date
+        if send_date is not None and not helpers.is_valid_date(send_date):
+            error_message = 'Invalid send_date format, please specify date as "YYYY-MM-DD", or omit it'
+            raise exceptions.DateFormatError(error_message)
+
+        # Sanitize shipping addresses and return address
+        shipping_addresses = [helpers.sanitize_shipping_address_for_card_send(shipping_address) for shipping_address in shipping_addresses]
+        if return_address is not None:
+            return_address = helpers.sanitize_return_address(return_address)
+            # prefix return address fields with return_
+            return_address = {f'return_{key}': value for key, value in return_address.items()}
+
+        # Build request json payload
+        body = {
+            'template_id': template_id,
+            'initiator': initiator,
+            'recipients': shipping_addresses,
+            'send_even_if_error': 'true' if send_if_error else 'false',
+            'offset_type': 'before', # This is arbitrary, but we must add it as per https://amcards.com/docs/open-mailing-form/
+            'date_offset': '0', # This is arbitrary, but we must add it as per https://amcards.com/docs/open-mailing-form/
+            'send_type': 'immediate',
+            'send_date': helpers.today(),
+        }
+
+        if return_address is not None:
+            body |= return_address
+
+        if send_date is not None:
+            body |= {'send_type': 'specific_date', 'send_date': send_date}
+
+        res = requests.post(f'{DOMAIN}/cards/open-mailing-form/', json=body, headers=self.HEADERS)
+
+        # Check for errors
+        match res.status_code:
+            case 401:
+                raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
+            case 402:
+                raise exceptions.InsufficientCreditsError('Clients\' user has insufficient credits, no card was scheduled')
+            case 403:
+                raise exceptions.ForbiddenTemplateError(f'Clients\' user does not own given template with id of {template_id}')
+
+        res_json = res.json()
+        return CardsResponse._from_json(res_json | {
+            'shipping_addresses': shipping_addresses,
         })
