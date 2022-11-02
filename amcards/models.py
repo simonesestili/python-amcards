@@ -402,3 +402,48 @@ class CampaignResponse:
             message=json['message'],
             shipping_address=json['shipping_address'],
         )
+
+class CardsResponse:
+    """Represents AMcards' response for sending multiple cards."""
+    def __init__(
+        self,
+        mailing_id: int,
+        user_email: str,
+        message: str,
+        shipping_addresses: List[dict],
+    ) -> None:
+        self._mailing_id = mailing_id
+        self._user_email = user_email
+        self._message = message
+        self._shipping_addresses = shipping_addresses
+
+    __repr__ = helpers.repr
+
+    @property
+    def mailing_id(self) -> int:
+        """Unique id for the :py:class:`mailing <amcards.models.Mailing>` created."""
+        return self._mailing_id
+
+    @property
+    def user_email(self) -> str:
+        """Client's user email."""
+        return self._user_email
+
+    @property
+    def message(self) -> str:
+        """AMcards' response message for sending multiple cards."""
+        return self._message
+
+    @property
+    def shipping_addresses(self) -> List[dict]:
+        """Shipping addresses for this CardsResponse."""
+        return self._shipping_addresses
+
+    @classmethod
+    def _from_json(cls, json: dict):
+        return cls(
+            mailing_id=int(json['mailing_uri'][17:-1]),
+            user_email=json['user'],
+            message=json['message'],
+            shipping_addresses=json['shipping_addresses'],
+        )
