@@ -24,13 +24,14 @@ class AMcardsClient:
         :return: The client's :py:class:`user <amcards.models.User>`.
         :rtype: :py:class:`User <amcards.models.User>`
 
+        :raises AuthenticationError: When the client's ``access_token`` is invalid.
+
         """
         res = requests.get(url=f'{DOMAIN}/.api/v1/user/', headers=self.HEADERS)
+        if not res.ok:
+            raise exceptions.AuthenticationError
+
         user_json = res.json().get('objects', [{}])[0]
-
-        if not user_json:
-            return None
-
         return User._from_json(user_json)
 
     def templates(self) -> List[Template]:
@@ -39,13 +40,14 @@ class AMcardsClient:
         :return: The client's :py:class:`templates <amcards.models.Template>`.
         :rtype: List[:py:class:`Template <amcards.models.Template>`]
 
+        :raises AuthenticationError: When the client's ``access_token`` is invalid.
+
         """
         res = requests.get(url=f'{DOMAIN}/.api/v1/template/', headers=self.HEADERS)
+        if not res.ok:
+            raise exceptions.AuthenticationError
+
         templates_json = res.json().get('objects', [])
-
-        if not templates_json:
-            return None
-
         return [Template._from_json(template_json) for template_json in templates_json]
 
     def quicksends(self) -> List[Template]:
@@ -54,13 +56,14 @@ class AMcardsClient:
         :return: The client's :py:class:`quicksend templates <amcards.models.Template>`.
         :rtype: List[:py:class:`Template <amcards.models.Template>`]
 
+        :raises AuthenticationError: When the client's ``access_token`` is invalid.
+
         """
         res = requests.get(url=f'{DOMAIN}/.api/v1/quicksendtemplate/', headers=self.HEADERS)
+        if not res.ok:
+            raise exceptions.AuthenticationError
+
         templates_json = res.json().get('objects', [])
-
-        if not templates_json:
-            return None
-
         return [Template._from_json(template_json) for template_json in templates_json]
 
     def campaigns(self) -> List[Campaign]:
@@ -69,13 +72,14 @@ class AMcardsClient:
         :return: The client's :py:class:`drip campaigns <amcards.models.Campaign>`.
         :rtype: List[:py:class:`Campaign <amcards.models.Campaign>`]
 
+        :raises AuthenticationError: When the client's ``access_token`` is invalid.
+
         """
         res = requests.get(url=f'{DOMAIN}/.api/v1/campaign/', headers=self.HEADERS)
+        if not res.ok:
+            raise exceptions.AuthenticationError
+
         campaigns_json = res.json().get('objects', [])
-
-        if not campaigns_json:
-            return None
-
         return [Campaign._from_json(campaign_json) for campaign_json in campaigns_json]
 
     def send_card(
