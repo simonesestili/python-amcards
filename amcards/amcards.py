@@ -29,7 +29,7 @@ class AMcardsClient:
         """
         res = requests.get(url=f'{DOMAIN}/.api/v1/user/', headers=self.HEADERS)
         if not res.ok:
-            raise exceptions.AuthenticationError
+            raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
 
         user_json = res.json().get('objects', [{}])[0]
         return User._from_json(user_json)
@@ -45,7 +45,7 @@ class AMcardsClient:
         """
         res = requests.get(url=f'{DOMAIN}/.api/v1/template/', headers=self.HEADERS)
         if not res.ok:
-            raise exceptions.AuthenticationError
+            raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
 
         templates_json = res.json().get('objects', [])
         return [Template._from_json(template_json) for template_json in templates_json]
@@ -65,8 +65,8 @@ class AMcardsClient:
         res = requests.get(url=f'{DOMAIN}/.api/v1/template/{id}/', headers=self.HEADERS)
         if not res.ok:
             if res.status_code in (403, 404):
-                raise exceptions.ForbiddenTemplateError
-            raise exceptions.AuthenticationError
+                raise exceptions.ForbiddenTemplateError('The template for the specified id either does not exist or is not owned by the client\'s user')
+            raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
 
         template_json = res.json()
         return Template._from_json(template_json)
@@ -82,7 +82,7 @@ class AMcardsClient:
         """
         res = requests.get(url=f'{DOMAIN}/.api/v1/quicksendtemplate/', headers=self.HEADERS)
         if not res.ok:
-            raise exceptions.AuthenticationError
+            raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
 
         templates_json = res.json().get('objects', [])
         return [Template._from_json(template_json) for template_json in templates_json]
@@ -102,8 +102,8 @@ class AMcardsClient:
         res = requests.get(url=f'{DOMAIN}/.api/v1/quicksendtemplate/{id}/', headers=self.HEADERS)
         if not res.ok:
             if res.status_code == 403:
-                raise exceptions.ForbiddenTemplateError
-            raise exceptions.AuthenticationError
+                raise exceptions.ForbiddenTemplateError('The quicksend template for the specified id either does not exist or is not owned by the client\'s user')
+            raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
 
         template_json = res.json()
         return Template._from_json(template_json)
@@ -119,7 +119,7 @@ class AMcardsClient:
         """
         res = requests.get(url=f'{DOMAIN}/.api/v1/campaign/', headers=self.HEADERS)
         if not res.ok:
-            raise exceptions.AuthenticationError
+            raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
 
         campaigns_json = res.json().get('objects', [])
         return [Campaign._from_json(campaign_json) for campaign_json in campaigns_json]
@@ -139,8 +139,8 @@ class AMcardsClient:
         res = requests.get(url=f'{DOMAIN}/.api/v1/campaign/{id}/', headers=self.HEADERS)
         if not res.ok:
             if res.status_code == 403:
-                raise exceptions.ForbiddenCampaignError
-            raise exceptions.AuthenticationError
+                raise exceptions.ForbiddenTemplateError('The drip campaign for the specified id either does not exist or is not owned by the client\'s user')
+            raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
 
         campaign_json = res.json()
         return Campaign._from_json(campaign_json)
