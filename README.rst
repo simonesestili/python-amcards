@@ -1,6 +1,6 @@
 Getting Started | See the full docs at `Read the Docs <https://python-amcards.readthedocs.io/en/latest/>`_
 ==========================================================================================================
-.. image:: images/readthedocs.png
+.. image:: https://i.ibb.co/tCrVfj6/readthedocs.png
     :target: https://python-amcards.readthedocs.io/en/latest/
 
 Installation
