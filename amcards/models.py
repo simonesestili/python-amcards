@@ -285,6 +285,7 @@ class Campaign:
         )
 
 class CardStatus(Enum):
+    """Represents the status of an AMcards card."""
     EDITABLE = 0
     VERIFYING_ADDRESS = 1
     IN_THE_MAIL = 2
