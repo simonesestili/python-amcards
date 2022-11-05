@@ -2,7 +2,7 @@ import requests
 from typing import List
 
 
-from .models import User, Template, Gift, Campaign, CardResponse, CardsResponse, CampaignResponse
+from .models import User, Template, Gift, Campaign, CardResponse, CardsResponse, CampaignResponse, Card
 from . import exceptions
 from . import __helpers as helpers
 
@@ -139,11 +139,48 @@ class AMcardsClient:
         res = requests.get(url=f'{DOMAIN}/.api/v1/campaign/{id}/', headers=self.HEADERS)
         if not res.ok:
             if res.status_code == 403:
-                raise exceptions.ForbiddenTemplateError('The drip campaign for the specified id either does not exist or is not owned by the client\'s user')
+                raise exceptions.ForbiddenCampaignError('The drip campaign for the specified id either does not exist or is not owned by the client\'s user')
             raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
 
         campaign_json = res.json()
         return Campaign._from_json(campaign_json)
+
+    def cards(self) -> List[Card]:
+        """Fetches client's AMcards cards.
+
+        :return: The client's :py:class:`cards <amcards.models.Card>`.
+        :rtype: List[:py:class:`Card <amcards.models.Card>`]
+
+        :raises AuthenticationError: When the client's ``access_token`` is invalid.
+
+        """
+        res = requests.get(url=f'{DOMAIN}/.api/v1/card/', headers=self.HEADERS)
+        if not res.ok:
+            raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
+
+        cards_json = res.json().get('objects', [])
+        return [Card._from_json(card_json) for card_json in cards_json]
+
+    def card(self, id: str | int) -> Campaign:
+        """Fetches client's AMcards card with a specified id.
+
+        :param str or int id: Unique id for the :py:class:`card <amcards.models.Card>` you are fetching.
+
+        :return: The client's :py:class:`card <amcards.models.Card>` with specified ``id``.
+        :rtype: :py:class:`Card <amcards.models.Card>`
+
+        :raises ForbiddenCardError: When the card for the specified ``id`` either does not exist or is not owned by the client's user.
+        :raises AuthenticationError: When the client's ``access_token`` is invalid.
+
+        """
+        res = requests.get(url=f'{DOMAIN}/.api/v1/card/{id}/', headers=self.HEADERS)
+        if not res.ok:
+            if res.status_code == 403:
+                raise exceptions.ForbiddenCardError('The card for the specified id either does not exist or is not owned by the client\'s user')
+            raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
+
+        card_json = res.json()
+        return Card._from_json(card_json)
 
     def send_card(
         self,
