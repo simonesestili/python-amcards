@@ -359,13 +359,13 @@ class Card:
         return self._date_created
 
     @property
-    def date_last_modified(self) -> datetime:
-        """Date and time card was last modified."""
+    def date_last_modified(self) -> Optional[datetime]:
+        """Date and time card was last modified. ``None`` if not modified yet."""
         return self._date_last_modified
 
     @property
-    def date_fulfilled(self) -> datetime:
-        """Date and time card was fulfilled."""
+    def date_fulfilled(self) -> Optional[datetime]:
+        """Date and time card was fulfilled. ``None`` if not fulfilled yet."""
         return self._date_fulfilled
 
     @property
