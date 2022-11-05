@@ -50,6 +50,27 @@ class AMcardsClient:
         templates_json = res.json().get('objects', [])
         return [Template._from_json(template_json) for template_json in templates_json]
 
+    def template(self, id: str | int) -> Template:
+        """Fetches client's AMcards template with a specified id.
+
+        :param str or int id: Unique id for the :py:class:`template <amcards.models.Template>` you are fetching.
+
+        :return: The client's :py:class:`template <amcards.models.Template>` with specified ``id``.
+        :rtype: :py:class:`Template <amcards.models.Template>`
+
+        :raises ForbiddenTemplateError: When the template for the specified ``id`` either does not exist or is not owned by the client's user.
+        :raises AuthenticationError: When the client's ``access_token`` is invalid.
+
+        """
+        res = requests.get(url=f'{DOMAIN}/.api/v1/template/{id}/', headers=self.HEADERS)
+        if not res.ok:
+            if res.status_code in (403, 404):
+                raise exceptions.ForbiddenTemplateError
+            raise exceptions.AuthenticationError
+
+        template_json = res.json()
+        return Template._from_json(template_json)
+
     def quicksends(self) -> List[Template]:
         """Fetches client's AMcards quicksend templates.
 
@@ -66,6 +87,27 @@ class AMcardsClient:
         templates_json = res.json().get('objects', [])
         return [Template._from_json(template_json) for template_json in templates_json]
 
+    def quicksend(self, id: str | int) -> Template:
+        """Fetches client's AMcards quicksend template with a specified id.
+
+        :param str or int id: Unique id for the :py:class:`quicksend template <amcards.models.Template>` you are fetching.
+
+        :return: The client's :py:class:`quicksend template <amcards.models.Template>` with specified ``id``.
+        :rtype: :py:class:`Template <amcards.models.Template>`
+
+        :raises ForbiddenTemplateError: When the quicksend template for the specified ``id`` either does not exist or is not owned by the client's user.
+        :raises AuthenticationError: When the client's ``access_token`` is invalid.
+
+        """
+        res = requests.get(url=f'{DOMAIN}/.api/v1/quicksendtemplate/{id}/', headers=self.HEADERS)
+        if not res.ok:
+            if res.status_code == 403:
+                raise exceptions.ForbiddenTemplateError
+            raise exceptions.AuthenticationError
+
+        template_json = res.json()
+        return Template._from_json(template_json)
+
     def campaigns(self) -> List[Campaign]:
         """Fetches client's AMcards drip campaigns.
 
@@ -81,6 +123,27 @@ class AMcardsClient:
 
         campaigns_json = res.json().get('objects', [])
         return [Campaign._from_json(campaign_json) for campaign_json in campaigns_json]
+
+    def campaign(self, id: str | int) -> Campaign:
+        """Fetches client's AMcards drip campaign with a specified id.
+
+        :param str or int id: Unique id for the :py:class:`drip campaign <amcards.models.Campaign>` you are fetching.
+
+        :return: The client's :py:class:`drip campaign <amcards.models.Campaign>` with specified ``id``.
+        :rtype: :py:class:`Campaign <amcards.models.Campaign>`
+
+        :raises ForbiddenCampaignError: When the drip campaign for the specified ``id`` either does not exist or is not owned by the client's user.
+        :raises AuthenticationError: When the client's ``access_token`` is invalid.
+
+        """
+        res = requests.get(url=f'{DOMAIN}/.api/v1/campaign/{id}/', headers=self.HEADERS)
+        if not res.ok:
+            if res.status_code == 403:
+                raise exceptions.ForbiddenCampaignError
+            raise exceptions.AuthenticationError
+
+        campaign_json = res.json()
+        return Campaign._from_json(campaign_json)
 
     def send_card(
         self,
