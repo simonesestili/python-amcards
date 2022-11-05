@@ -1,5 +1,6 @@
-from typing import List
+from enum import Enum
 from datetime import datetime
+from typing import List, Optional
 
 
 from . import __helpers as helpers
@@ -283,12 +284,119 @@ class Campaign:
             send_if_duplicate=json['send_even_if_duplicate'],
         )
 
+class CardStatus(Enum):
+    EDITABLE = 0
+    VERIFYING_ADDRESS = 1
+    IN_THE_MAIL = 2
+    FLAGGED = 3
+    DELIVERED = 4
+    READY_FOR_PRINT = 5
+    PRINTED = 6
+    PROCESSING = 7
+    REFUNDED = 8
+    TESTING = 9
+
 class Card:
     """Represents an AMcards card."""
     def __init__(
         self,
+        card_id: int,
+        amount_charged: int,
+        status: CardStatus,
+        initiator: str,
+        gifts: List[Gift],
+        send_date: str,
+        date_created: datetime,
+        date_last_modified: datetime,
+        date_fulfilled: datetime,
+        is_international: bool,
+        campaign_id: Optional[int],
+        shipping_address: dict,
+        return_address: dict,
     ) -> None:
-        pass
+        self._card_id = card_id
+        self._amount_charged = amount_charged
+        self._status = status
+        self._initiator = initiator
+        self._gifts = gifts
+        self._send_date = send_date
+        self._date_created = date_created
+        self._date_last_modified = date_last_modified
+        self._date_fulfilled = date_fulfilled
+        self._is_international = is_international
+        self._campaign_id = campaign_id
+        self._shipping_address = shipping_address
+        self._return_address = return_address
+
+    @property
+    def card_id(self) -> int:
+        return self._card_id
+
+    @property
+    def amount_charged(self) -> int:
+        return self._amount_charged
+
+    @property
+    def status(self) -> CardStatus:
+        return self._status
+
+    @property
+    def initiator(self) -> str:
+        return self._initiator
+
+    @property
+    def gifts(self) -> List[Gift]:
+        return self._gifts
+
+    @property
+    def send_date(self) -> str:
+        return self._send_date
+
+    @property
+    def date_created(self) -> datetime:
+        return self._date_created
+
+    @property
+    def date_last_modified(self) -> datetime:
+        return self._date_last_modified
+
+    @property
+    def date_fulfilled(self) -> datetime:
+        return self._date_fulfilled
+
+    @property
+    def is_international(self) -> bool:
+        return self._is_international
+
+    @property
+    def campaign_id(self) -> Optional[int]:
+        return self._campaign_id
+
+    @property
+    def shipping_address(self) -> dict:
+        return self._shipping_address
+
+    @property
+    def return_address(self) -> dict:
+        return self._return_address
+
+    @classmethod
+    def _from_json(cls, json: dict):
+        return cls(
+            card_id=json['id'],
+            amount_charged=int(json['amount_charged'] * 100),
+            status=CardStatus(json['status']),
+            initiator=json['initiator'],
+            gifts=[Gift._from_json(gift_json) for gift_json in json['gifts']],
+            send_date=json['send_date'],
+            date_created=helpers.to_datetime(json['created']),
+            date_last_modified=helpers.to_datetime(json['last_modified']),
+            date_fulfilled=helpers.to_datetime(json['fulfilled']),
+            is_international=json['is_international'],
+            campaign_id=json['campaign_pk'],
+            shipping_address=helpers.parse_shipping_address(json),
+            return_address=helpers.parse_return_address(json),
+        )
 
 class Mailing:
     """Represents an AMcards mailing."""

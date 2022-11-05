@@ -91,3 +91,32 @@ def sanitize_return_address(return_address: dict) -> dict:
 def repr(cls):
     props = [(prop, getattr(cls, prop)) for prop in dir(cls) if not prop.startswith('_')]
     return '(' + ', '.join([f'{k}={v}' for k, v in props]) + ')'
+
+def parse_shipping_address(json: dict) -> dict:
+    shipping_address = {}
+    for key, value in json.items():
+        match key[8:]:
+            case 'city': shipping_address['city'] = value
+            case 'country': shipping_address['country'] = value
+            case 'first_name': shipping_address['first_name'] = value
+            case 'last_name': shipping_address['last_name'] = value
+            case 'line_1': shipping_address['address_line_1'] = value
+            case 'organization' if value: shipping_address['organization'] = value
+            case 'postal': shipping_address['postal_code'] = value
+            case 'state': shipping_address['state'] = value
+    if json['third_party_contact_id']:
+        shipping_address['third_party_contact_id'] = json['third_party_contact_id']
+    return shipping_address
+
+def parse_return_address(json: dict) -> dict:
+    return_address = {}
+    for key, value in json.items():
+        match key[10:]:
+            case 'city': return_address['city'] = value
+            case 'country': return_address['country'] = value
+            case 'first_name': return_address['first_name'] = value
+            case 'last_name': return_address['last_name'] = value
+            case 'line_1': return_address['address_line_1'] = value
+            case 'postal': return_address['postal_code'] = value
+            case 'state': return_address['state'] = value
+    return return_address
