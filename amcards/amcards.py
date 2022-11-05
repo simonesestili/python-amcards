@@ -34,8 +34,11 @@ class AMcardsClient:
         user_json = res.json().get('objects', [{}])[0]
         return User._from_json(user_json)
 
-    def templates(self) -> List[Template]:
+    def templates(self, limit: int = 25, skip: int = 0) -> List[Template]:
         """Fetches client's AMcards templates.
+
+        :param int limit: Defaults to ``25``. Max number of templates to be fetched.
+        :param int skip: Defaults to ``0``. Number of templates to be skipped.
 
         :return: The client's :py:class:`templates <amcards.models.Template>`.
         :rtype: List[:py:class:`Template <amcards.models.Template>`]
@@ -43,7 +46,7 @@ class AMcardsClient:
         :raises AuthenticationError: When the client's ``access_token`` is invalid.
 
         """
-        res = requests.get(url=f'{DOMAIN}/.api/v1/template/', headers=self.HEADERS)
+        res = requests.get(url=f'{DOMAIN}/.api/v1/template/', headers=self.HEADERS, params={'limit': limit, 'offset': skip})
         if not res.ok:
             raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
 
@@ -71,8 +74,11 @@ class AMcardsClient:
         template_json = res.json()
         return Template._from_json(template_json)
 
-    def quicksends(self) -> List[Template]:
+    def quicksends(self, limit: int = 25, skip: int = 0) -> List[Template]:
         """Fetches client's AMcards quicksend templates.
+
+        :param int limit: Defaults to ``25``. Max number of quicksend templates to be fetched.
+        :param int skip: Defaults to ``0``. Number of quicksend templates to be skipped.
 
         :return: The client's :py:class:`quicksend templates <amcards.models.Template>`.
         :rtype: List[:py:class:`Template <amcards.models.Template>`]
@@ -80,7 +86,7 @@ class AMcardsClient:
         :raises AuthenticationError: When the client's ``access_token`` is invalid.
 
         """
-        res = requests.get(url=f'{DOMAIN}/.api/v1/quicksendtemplate/', headers=self.HEADERS)
+        res = requests.get(url=f'{DOMAIN}/.api/v1/quicksendtemplate/', headers=self.HEADERS, params={'limit': limit, 'offset': skip})
         if not res.ok:
             raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
 
@@ -108,8 +114,11 @@ class AMcardsClient:
         template_json = res.json()
         return Template._from_json(template_json)
 
-    def campaigns(self) -> List[Campaign]:
+    def campaigns(self, limit: int = 25, skip: int = 0) -> List[Campaign]:
         """Fetches client's AMcards drip campaigns.
+
+        :param int limit: Defaults to ``25``. Max number of drip campaigns to be fetched.
+        :param int skip: Defaults to ``0``. Number of drip campaigns to be skipped.
 
         :return: The client's :py:class:`drip campaigns <amcards.models.Campaign>`.
         :rtype: List[:py:class:`Campaign <amcards.models.Campaign>`]
@@ -117,7 +126,7 @@ class AMcardsClient:
         :raises AuthenticationError: When the client's ``access_token`` is invalid.
 
         """
-        res = requests.get(url=f'{DOMAIN}/.api/v1/campaign/', headers=self.HEADERS)
+        res = requests.get(url=f'{DOMAIN}/.api/v1/campaign/', headers=self.HEADERS, params={'limit': limit, 'offset': skip})
         if not res.ok:
             raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
 
@@ -145,8 +154,11 @@ class AMcardsClient:
         campaign_json = res.json()
         return Campaign._from_json(campaign_json)
 
-    def cards(self) -> List[Card]:
+    def cards(self, limit: int = 25, skip: int = 0) -> List[Card]:
         """Fetches client's AMcards cards.
+
+        :param int limit: Defaults to ``25``. Max number of cards to be fetched.
+        :param int skip: Defaults to ``0``. Number of cards to be skipped.
 
         :return: The client's :py:class:`cards <amcards.models.Card>`.
         :rtype: List[:py:class:`Card <amcards.models.Card>`]
@@ -154,7 +166,7 @@ class AMcardsClient:
         :raises AuthenticationError: When the client's ``access_token`` is invalid.
 
         """
-        res = requests.get(url=f'{DOMAIN}/.api/v1/card/', headers=self.HEADERS)
+        res = requests.get(url=f'{DOMAIN}/.api/v1/card/', headers=self.HEADERS, params={'limit': limit, 'offset': skip})
         if not res.ok:
             raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
 
