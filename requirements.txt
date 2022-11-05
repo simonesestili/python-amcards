@@ -2,6 +2,7 @@ alabaster==0.7.12
 attrs==22.1.0
 Babel==2.10.3
 bleach==5.0.1
+build==0.9.0
 certifi==2022.9.24
 charset-normalizer==2.1.1
 colorama==0.4.6
@@ -18,6 +19,7 @@ keyring==23.9.3
 MarkupSafe==2.1.1
 more-itertools==9.0.0
 packaging==21.3
+pep517==0.13.0
 pkginfo==1.8.3
 pluggy==1.0.0
 Pygments==2.13.0
