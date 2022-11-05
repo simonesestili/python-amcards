@@ -1,3 +1,4 @@
+from typing import Optional
 from datetime import datetime
 
 REQUIRED_SHIPPING_ADDRESS_FIELDS = {
@@ -39,7 +40,8 @@ def today() -> str:
     mm, dd = map(lambda x: str(x).zfill(2), (today.month, today.day))
     return f'{yyyy}-{mm}-{dd}'
 
-def to_datetime(datetime_str: str) -> datetime:
+def to_datetime(datetime_str: Optional[str]) -> Optional[datetime]:
+    if datetime_str is None: return None
     return datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M:%S.%f') 
 
 def format_cents(price_in_cents: int) -> str:

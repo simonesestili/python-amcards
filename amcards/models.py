@@ -300,11 +300,10 @@ class Card:
     """Represents an AMcards card."""
     def __init__(
         self,
-        card_id: int,
+        id: int,
         amount_charged: int,
         status: CardStatus,
         initiator: str,
-        gifts: List[Gift],
         send_date: str,
         date_created: datetime,
         date_last_modified: datetime,
@@ -314,11 +313,10 @@ class Card:
         shipping_address: dict,
         return_address: dict,
     ) -> None:
-        self._card_id = card_id
+        self._id = id
         self._amount_charged = amount_charged
         self._status = status
         self._initiator = initiator
-        self._gifts = gifts
         self._send_date = send_date
         self._date_created = date_created
         self._date_last_modified = date_last_modified
@@ -328,66 +326,107 @@ class Card:
         self._shipping_address = shipping_address
         self._return_address = return_address
 
+    __repr__ = helpers.repr
+
     @property
-    def card_id(self) -> int:
-        return self._card_id
+    def id(self) -> int:
+        """Card's unique identifier."""
+        return self._id
 
     @property
     def amount_charged(self) -> int:
+        """Total amount charged to client's user in `cents`."""
         return self._amount_charged
 
     @property
     def status(self) -> CardStatus:
+        """Current status of card."""
         return self._status
 
     @property
     def initiator(self) -> str:
+        """Unique identifier of client's user so if multiple users use a single AMcards.com account, a card can be identified per person."""
         return self._initiator
 
     @property
-    def gifts(self) -> List[Gift]:
-        return self._gifts
-
-    @property
     def send_date(self) -> str:
+        """The date the card is sent. If not specified, the card is scheduled for the day after it was created and the value will be ``None``. The format should be: ``"YYYY-MM-DD"``."""
         return self._send_date
 
     @property
     def date_created(self) -> datetime:
+        """Date and time card was created."""
         return self._date_created
 
     @property
     def date_last_modified(self) -> datetime:
+        """Date and time card was last modified."""
         return self._date_last_modified
 
     @property
     def date_fulfilled(self) -> datetime:
+        """Date and time card was fulfilled."""
         return self._date_fulfilled
 
     @property
     def is_international(self) -> bool:
+        """If True, card was shipped international. If False, card was shipped domestic."""
         return self._is_international
 
     @property
     def campaign_id(self) -> Optional[int]:
+        """Unique identifier for drip campaign associated with this card. If this card is not a part of a drip campaign, this value will be ``None``."""
         return self._campaign_id
 
     @property
     def shipping_address(self) -> dict:
+        """Shipping address for the card.
+        In the form:
+
+            .. code-block::
+
+                {
+                    'first_name': 'Ralph',
+                    'last_name': 'Mullins',
+                    'address_line_1': '2285 Reppert Road',
+                    'city': 'Southfield',
+                    'state': 'MI',
+                    'postal_code': '48075',
+                    'country': 'US',
+                    'organization': 'Google',                # OPTIONAL
+                    'third_party_contact_id': 'crmid1453131' # OPTIONAL
+                }
+
+        """
         return self._shipping_address
 
     @property
     def return_address(self) -> dict:
+        """Return address for the card.
+        In the form:
+
+            .. code-block::
+
+                {
+                    'first_name': 'Ralph',                   # OPTIONAL
+                    'last_name': 'Mullins',                  # OPTIONAL
+                    'address_line_1': '2285 Reppert Road',   # OPTIONAL
+                    'city': 'Southfield',                    # OPTIONAL
+                    'state': 'MI',                           # OPTIONAL
+                    'postal_code': '48075',                  # OPTIONAL
+                    'country': 'US',                         # OPTIONAL
+                }
+
+        """
         return self._return_address
 
     @classmethod
     def _from_json(cls, json: dict):
         return cls(
-            card_id=json['id'],
+            id=json['id'],
             amount_charged=int(json['amount_charged'] * 100),
             status=CardStatus(json['status']),
             initiator=json['initiator'],
-            gifts=[Gift._from_json(gift_json) for gift_json in json['gifts']],
             send_date=json['send_date'],
             date_created=helpers.to_datetime(json['created']),
             date_last_modified=helpers.to_datetime(json['last_modified']),
@@ -404,6 +443,8 @@ class Mailing:
         self,
     ) -> None:
         pass
+
+    __repr__ = helpers.repr
 
 class CardResponse:
     """Represents AMcards' response for sending a single card."""

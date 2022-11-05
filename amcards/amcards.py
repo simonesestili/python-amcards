@@ -101,7 +101,7 @@ class AMcardsClient:
         """
         res = requests.get(url=f'{DOMAIN}/.api/v1/quicksendtemplate/{id}/', headers=self.HEADERS)
         if not res.ok:
-            if res.status_code == 403:
+            if res.status_code in (403, 404):
                 raise exceptions.ForbiddenTemplateError('The quicksend template for the specified id either does not exist or is not owned by the client\'s user')
             raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
 
@@ -138,7 +138,7 @@ class AMcardsClient:
         """
         res = requests.get(url=f'{DOMAIN}/.api/v1/campaign/{id}/', headers=self.HEADERS)
         if not res.ok:
-            if res.status_code == 403:
+            if res.status_code in (403, 404):
                 raise exceptions.ForbiddenCampaignError('The drip campaign for the specified id either does not exist or is not owned by the client\'s user')
             raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
 
@@ -175,7 +175,7 @@ class AMcardsClient:
         """
         res = requests.get(url=f'{DOMAIN}/.api/v1/card/{id}/', headers=self.HEADERS)
         if not res.ok:
-            if res.status_code == 403:
+            if res.status_code in (403, 404):
                 raise exceptions.ForbiddenCardError('The card for the specified id either does not exist or is not owned by the client\'s user')
             raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
 
@@ -252,7 +252,7 @@ class AMcardsClient:
                     'country': 'US',                         # OPTIONAL
                 }
 
-        :param Optional[str] send_date: The date the card should be sent, If not specified, the card will be scheduled for the following day. The format should be: ``"YYYY-MM-DD"``.
+        :param Optional[str] send_date: The date the card should be sent. If not specified, the card will be scheduled for the following day. The format should be: ``"YYYY-MM-DD"``.
 
         :return: AMcards' :py:class:`response <amcards.models.CardResponse>` for sending a single card.
         :rtype: :py:class:`CardResponse <amcards.models.CardResponse>`
