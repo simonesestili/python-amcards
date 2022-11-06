@@ -438,14 +438,63 @@ class Card:
             return_address=helpers.parse_return_address(json),
         )
 
+class MailingStatus(Enum):
+    """Represents the status of an AMcards mailing."""
+    COMPLETE = 0
+    PROCESSING = 1
+
 class Mailing:
     """Represents an AMcards mailing."""
     def __init__(
         self,
+        id: int,
+        amount_charged: int,
+        cards: List[Card],
+        status: MailingStatus,
+        date_created: datetime,
     ) -> None:
-        pass
+        self._id = id
+        self._amount_charged = amount_charged
+        self._cards = cards
+        self._status = status
+        self._date_created = date_created
 
     __repr__ = helpers.repr
+
+    @property
+    def id(self) -> int:
+        """Mailing's unique identifier."""
+        return self._id
+
+    @property
+    def amount_charged(self) -> int:
+        """Total amount charged to client's user in `cents`."""
+        return self._amount_charged
+
+    @property
+    def cards(self) -> List[Card]:
+        """All cards that are a part of this mailing."""
+        return self._cards
+
+    @property
+    def status(self) -> MailingStatus:
+        """Current status of mailing."""
+        return self._status
+
+    @property
+    def date_created(self) -> datetime:
+        """Date and time mailing was created."""
+        return self._date_created
+
+    # @classmethod
+    # def _from_json(cls, json: dict):
+    #     recipients = json['report']['recipients']
+    #     return cls(
+    #         id=json['id'],
+    #         amount_charged=int(json['amount_charged']),
+    #         status=CardStatus(json['status']),
+    #         date_created=helpers.to_datetime(json['created']),
+    #     )
 
 class CardResponse:
     """Represents AMcards' response for sending a single card."""
