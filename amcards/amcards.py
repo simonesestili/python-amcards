@@ -9,6 +9,13 @@ from . import __helpers as helpers
 
 DOMAIN = 'https://amcards.com'
 
+FIXED_COUNTRY = {
+    # US fixes
+    'USA': 'US', 'UNITED STATES': 'US', 'UNITED STATES OF AMERICA': 'US', 'THE UNITED STATES OF AMERICA': 'US', 'AMERICA': 'US',
+    # GB fixes
+    'ENGLAND': 'GB',
+}
+
 
 class AMcardsClient:
     """Client for AMcards API."""
@@ -194,13 +201,113 @@ class AMcardsClient:
         card_json = res.json()
         return Card._from_json(card_json)
 
+    def send_card_cost(
+        self,
+        template_id: str | int,
+        shipping_address: dict,
+        return_address: dict = None,
+        send_date: str = None,
+    ) -> int:
+        """Get cost for a card send. Without actually sending the card.
+
+            .. code-block::
+
+                >>> from amcards import AMcardsClient
+                >>> client = AMcardsClient('youraccesstoken')
+                >>> res = client.send_card_cost(
+                ...     template_id='123',
+                ...     shipping_address={
+                ...         'first_name': 'Ralph',
+                ...         'last_name': 'Mullins',
+                ...         'address_line_1': '2285 Reppert Road',
+                ...         'city': 'Southfield',
+                ...         'state': 'MI',
+                ...         'postal_code': '48075',
+                ...         'country': 'US'
+                ...     }
+                ... )
+                >>> res
+                442
+
+        :param str or int template_id: Unique id for the :py:class:`template <amcards.models.Template>` you are getting cost for.
+        :param dict shipping_address: Dict of shipping details. Here's an example how the dict might look, make sure you include all of the `required` keys:
+
+            .. code-block::
+
+                {
+                    'first_name': 'Ralph',
+                    'last_name': 'Mullins',
+                    'address_line_1': '2285 Reppert Road',
+                    'city': 'Southfield',
+                    'state': 'MI',
+                    'postal_code': '48075',
+                    'country': 'US',
+                    'organization': 'Google',                # OPTIONAL
+                    'third_party_contact_id': 'crmid1453131' # OPTIONAL
+                }
+
+        :param Optional[dict] return_address: Dict of return details that will override the client's AMcards user default return details. Here's an example how the dict might look, all of the keys are optional:
+
+            .. code-block::
+
+                {
+                    'first_name': 'Ralph',                   # OPTIONAL
+                    'last_name': 'Mullins',                  # OPTIONAL
+                    'address_line_1': '2285 Reppert Road',   # OPTIONAL
+                    'city': 'Southfield',                    # OPTIONAL
+                    'state': 'MI',                           # OPTIONAL
+                    'postal_code': '48075',                  # OPTIONAL
+                    'country': 'US',                         # OPTIONAL
+                }
+
+        :param Optional[str] send_date: The date the card should be sent. If not specified, the card will be scheduled for the following day. The format should be: ``"YYYY-MM-DD"``.
+
+        :return: Cost for sending card in `cents`.
+        :rtype: ``int``
+
+        :raises AuthenticationError: When the client's ``access_token`` is invalid.
+        :raises ForbiddenTemplateError: When the client does not own the :py:class:`template <amcards.models.Template>` specified by ``template_id``.
+        :raises ShippingAddressError: When ``shipping_address`` is missing some `required` keys.
+        :raises DateFormatError: When one of the dates provided is not in ``"YYYY-MM-DD"`` format.
+
+        """
+        # Validate shipping address
+        missings = helpers.get_missing_required_shipping_address_fields(shipping_address)
+        if missings:
+            error_message = 'Missing the following required shipping address fields: ' + ', '.join(missings)
+            raise exceptions.ShippingAddressError(error_message)
+
+        # Validate send date
+        if send_date is not None and not helpers.is_valid_date(send_date):
+            error_message = 'Invalid send_date format, please specify date as "YYYY-MM-DD", or omit it'
+            raise exceptions.DateFormatError(error_message)
+
+        # Sanitize shipping address and return address
+        shipping_address = helpers.sanitize_shipping_address_for_card_send(shipping_address)
+        if return_address is not None:
+            return_address = helpers.sanitize_return_address(return_address)
+            # prefix return address fields with return_
+            return_address = {f'return_{key}': value for key, value in return_address.items()}
+
+        user = self.user()
+        shipping_country = _fix_country(shipping_address['country'])
+        return_country = _fix_country(user.country)
+        if return_address is not None and 'return_country' in return_address:
+            return_country = _fix_country(return_address['return_country'])
+
+        # If this card is domestic charge domestic postage
+        if shipping_country in user.domestic_postage_countries and return_country in user.domestic_postage_countries:
+            return user.greeting_card_cost + user.domestic_postage_cost
+        # Otherwise charge international postage
+        return user.greeting_card_cost + user.international_postage_cost
+
     def send_card(
         self,
         template_id: str | int,
         initiator: str,
         shipping_address: dict,
         return_address: dict = None,
-        send_date: str = None
+        send_date: str = None,
     ) -> CardResponse:
         """Attempt to send a card.
 
@@ -322,13 +429,145 @@ class AMcardsClient:
             'shipping_address': shipping_address,
         })
 
+    def send_campaign_cost(
+        self,
+        campaign_id: str | int,
+        shipping_address: dict,
+        return_address: dict = None,
+        send_date: str = None,
+    ) -> int:
+        """Get cost for a campaign send. Without actually sending the campaign.
+
+            .. code-block::
+
+                >>> from amcards import AMcardsClient
+                >>> client = AMcardsClient('youraccesstoken')
+                >>> res = client.send_campaign_cost(
+                ...     campaign_id='123',
+                ...     shipping_address={
+                ...         'first_name': 'Ralph',
+                ...         'last_name': 'Mullins',
+                ...         'address_line_1': '2285 Reppert Road',
+                ...         'city': 'Southfield',
+                ...         'state': 'MI',
+                ...         'postal_code': '48075',
+                ...         'country': 'US'
+                ...     }
+                ... )
+                >>> res
+                442
+
+        :param str or int campaign_id: Unique id for the :py:class:`drip campaign <amcards.models.Campaign>` you are getting cost for.
+        :param dict shipping_address: Dict of shipping details. Here's an example how the dict might look, make sure you include all of the `required` keys:
+
+            .. code-block::
+
+                {
+                    'first_name': 'Ralph',
+                    'last_name': 'Mullins',
+                    'address_line_1': '2285 Reppert Road',
+                    'city': 'Southfield',
+                    'state': 'MI',
+                    'postal_code': '48075',
+                    'country': 'US',
+                    'organization': 'Google',                # OPTIONAL
+                    'phone_number': '15556667777',           # OPTIONAL
+                    'birth_date': '2003-12-25',              # OPTIONAL
+                    'anniversary_date': '2022-10-31',        # OPTIONAL
+                    'third_party_contact_id': 'crmid1453131' # OPTIONAL
+                }
+
+        :param Optional[dict] return_address: Dict of return details that will override the client's AMcards user default return details. Here's an example how the dict might look, all of the keys are optional:
+
+            .. code-block::
+
+                {
+                    'first_name': 'Ralph',                   # OPTIONAL
+                    'last_name': 'Mullins',                  # OPTIONAL
+                    'address_line_1': '2285 Reppert Road',   # OPTIONAL
+                    'city': 'Southfield',                    # OPTIONAL
+                    'state': 'MI',                           # OPTIONAL
+                    'postal_code': '48075',                  # OPTIONAL
+                    'country': 'US',                         # OPTIONAL
+                }
+
+        :param Optional[str] send_date: The date the drip campaign should be sent, in ``"YYYY-MM-DD"`` format. If not specified, the drip campaign will be scheduled for the following day.
+
+        :return: Cost for sending campaign in `cents`.
+        :rtype: ``int``
+
+        :raises AuthenticationError: When the client's ``access_token`` is invalid.
+        :raises ForbiddenCampaignError: When the client does not own the :py:class:`campaign <amcards.models.Campaign>` specified by ``campaign_id``.
+        :raises ShippingAddressError: When ``shipping_address`` is missing some `required` keys.
+        :raises DateFormatError: When one of the dates provided is not in ``"YYYY-MM-DD"`` format.
+        :raises PhoneFormatError: When the ``phone_number`` is not a digit string of length 10.
+
+        """
+        # Validate shipping address
+        missings = helpers.get_missing_required_shipping_address_fields(shipping_address)
+        if missings:
+            error_message = 'Missing the following required shipping address fields: ' + ', '.join(missings)
+            raise exceptions.ShippingAddressError(error_message)
+
+        # Validate send date
+        if send_date is not None and not helpers.is_valid_date(send_date):
+            error_message = 'Invalid send_date format, please specify date as "YYYY-MM-DD", or omit it'
+            raise exceptions.DateFormatError(error_message)
+
+        # Sanitize shipping address and return address
+        shipping_address = helpers.sanitize_shipping_address_for_campaign_send(shipping_address)
+        if return_address is not None:
+            return_address = helpers.sanitize_return_address(return_address)
+            # prefix return address fields with return_
+            return_address = {f'return_{key}': value for key, value in return_address.items()}
+
+        # Validate birth_date
+        if 'birth_date' in shipping_address and not helpers.is_valid_date(shipping_address['birth_date']):
+            error_message = 'Invalid birth_date format, please specify date as "YYYY-MM-DD", or omit it'
+            raise exceptions.DateFormatError(error_message)
+        # Validate anniversary_date
+        if 'anniversary_date' in shipping_address and not helpers.is_valid_date(shipping_address['anniversary_date']):
+            error_message = 'Invalid anniversary_date format, please specify date as "YYYY-MM-DD", or omit it'
+            raise exceptions.DateFormatError(error_message)
+        # Validate phone_number
+        if 'phone_number' in shipping_address and not helpers.is_valid_phone(shipping_address['phone_number']):
+            error_message = 'Invalid phone_number format, please specify phone as a 10 number string with no special formatting (ex. 15556667777), or omit it'
+            raise exceptions.PhoneFormatError(error_message)
+
+        # Build request json payload
+        body = {
+            'campaign_id': campaign_id,
+            'recipients': [shipping_address],
+        }
+
+        if return_address is not None:
+            body |= return_address
+
+        if send_date is not None:
+            body |= {'send_date': send_date}
+
+        if 'birth_date' in shipping_address:
+            body['recipients'][0]['birth_day'] = shipping_address['birth_date'][-2:]
+            body['recipients'][0]['birth_month'] = shipping_address['birth_date'][-5:-3]
+
+        res = requests.post(f'{DOMAIN}/campaigns/calculate-campaign-price/', json=body, headers=self.HEADERS)
+
+        # Check for errors
+        match res.status_code:
+            case 401:
+                raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
+            case 403:
+                raise exceptions.ForbiddenCampaignError(f'Clients\' user does not own given campaign with id of {campaign_id}')
+
+        return res.json()['pricing']['total_cost']
+
     def send_campaign(
         self,
         campaign_id: str | int,
         initiator: str,
         shipping_address: dict,
         return_address: dict = None,
-        send_date: str = None
+        send_date: str = None,
     ) -> CampaignResponse:
         """Attempt to send a drip campaign.
 
@@ -629,3 +868,8 @@ class AMcardsClient:
         return CardsResponse._from_json(res_json | {
             'shipping_addresses': shipping_addresses,
         })
+
+def _fix_country(country: str) -> str:
+    if not isinstance(country, str): return ''
+    country = country.upper()
+    return FIXED_COUNTRY.get(country, country)
