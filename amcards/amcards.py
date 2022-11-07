@@ -161,11 +161,14 @@ class AMcardsClient:
         campaign_json = res.json()
         return Campaign._from_json(campaign_json)
 
-    def cards(self, limit: int = 25, skip: int = 0) -> List[Card]:
+    def cards(self, limit: int = 25, skip: int = 0, filters: dict = None) -> List[Card]:
         """Fetches client's AMcards cards.
 
         :param int limit: Defaults to ``25``. Max number of cards to be fetched.
         :param int skip: Defaults to ``0``. Number of cards to be skipped.
+        :param Optional[dict] filters: Defaults to ``None``. Filters to be applied when fetching cards.
+
+            A common use case is to use ``filter = {'third_party_contact_id': 'some_target_id'}, this will fetch all cards that were shipped to a recipient with a ``third_party_contact_id == 'some_target_id'``.
 
         :return: The client's :py:class:`cards <amcards.models.Card>`.
         :rtype: List[:py:class:`Card <amcards.models.Card>`]
@@ -173,7 +176,12 @@ class AMcardsClient:
         :raises AuthenticationError: When the client's ``access_token`` is invalid.
 
         """
-        res = requests.get(url=f'{DOMAIN}/.api/v1/card/', headers=self.HEADERS, params={'limit': limit, 'offset': skip})
+        params = {
+            'limit': limit,
+            'offset': skip,
+        } | (filters or {})
+
+        res = requests.get(url=f'{DOMAIN}/.api/v1/card/', headers=self.HEADERS, params=params)
         if not res.ok:
             raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
 
