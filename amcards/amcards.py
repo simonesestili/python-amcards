@@ -168,7 +168,7 @@ class AMcardsClient:
         :param int skip: Defaults to ``0``. Number of cards to be skipped.
         :param Optional[dict] filters: Defaults to ``None``. Filters to be applied when fetching cards.
 
-            A common use case is to use ``filter = {'third_party_contact_id': 'some_target_id'}, this will fetch all cards that were shipped to a recipient with a ``third_party_contact_id == 'some_target_id'``.
+            A common use case is to use ``filter = {'third_party_contact_id': 'some_target_id'}``, this will fetch all cards that were shipped to a recipient with a ``third_party_contact_id == 'some_target_id'``.
 
         :return: The client's :py:class:`cards <amcards.models.Card>`.
         :rtype: List[:py:class:`Card <amcards.models.Card>`]
