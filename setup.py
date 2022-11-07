@@ -7,7 +7,7 @@ def README():
 
 setup(
     name='python-amcards',
-    version='1.1.6',
+    version='1.1.7',
     description='A wrapper for the AMcards API.',
     long_description=README(),
     long_description_content_type='text/x-rst',
@@ -17,7 +17,7 @@ setup(
     packages=['amcards'],
     package_dir={'amcards': 'amcards'},
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
         'Natural Language :: English',
