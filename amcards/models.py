@@ -10,6 +10,7 @@ class User:
     """Represents an AMcards user."""
     def __init__(
         self,
+        id: int,
         first_name: str,
         last_name: str,
         credits: int,
@@ -24,6 +25,7 @@ class User:
         domestic_postage_countries: set,
         greeting_card_cost: int,
     ) -> None:
+        self._id = id
         self._first_name = first_name
         self._last_name = last_name
         self._credits = credits
@@ -39,6 +41,11 @@ class User:
         self._greeting_card_cost = greeting_card_cost
 
     __repr__ = helpers.repr
+
+    @property
+    def id(self) -> int:
+        """User's unique identifier."""
+        return self._id
 
     @property
     def first_name(self) -> str:
@@ -108,7 +115,11 @@ class User:
 
     @classmethod
     def _from_json(cls, json: dict):
+        user_id = json['resource_uri']
+        user_id = user_id[user_id.find('user/')+5:]
+        if not user_id[-1].isdigit(): user_id = user_id[:-1]
         return cls(
+            id=int(user_id),
             first_name=json['first_name'],
             last_name=json['last_name'],
             credits=json['credits'],
@@ -122,28 +133,6 @@ class User:
             international_postage_cost=json['postage']['international_cost'],
             domestic_postage_countries=set(json['postage']['domestic_countries']),
             greeting_card_cost=json['product_pricing_info']['5x7greetingcard']
-        )
-
-    def __str__(self) -> str:
-        formatted_credits = helpers.format_cents(price_in_cents=self.credits)
-        formatted_domestic_postage_cost = helpers.format_cents(price_in_cents=self.domestic_postage_cost)
-        formatted_international_postage_cost = helpers.format_cents(price_in_cents=self.international_postage_cost)
-        formatted_greeting_card_cost = helpers.format_cents(price_in_cents=self.greeting_card_cost)
-        formatted_domestic_postage_countries = ', '.join(self.domestic_postage_countries)
-        return (
-            f'First Name: {self.first_name}\n'
-            f'Last Name: {self.last_name}\n'
-            f'Credit Balance: {formatted_credits}\n'
-            f'Date Joined: {self.date_joined}\n'
-            f'Address Line 1: {self.address_line_1}\n'
-            f'City: {self.city}\n'
-            f'State: {self.state}\n'
-            f'Postal Code: {self.postal_code}\n'
-            f'Country: {self.country}\n'
-            f'Domestic Postage Cost: {formatted_domestic_postage_cost}\n'
-            f'International Postage Cost: {formatted_international_postage_cost}\n'
-            f'Domestic Postage Countries: {formatted_domestic_postage_countries}\n'
-            f'Greeting Card Cost: {formatted_greeting_card_cost}\n'
         )
 
 class Gift:

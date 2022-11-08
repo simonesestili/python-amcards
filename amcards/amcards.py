@@ -1,5 +1,5 @@
 import requests
-from typing import List
+from typing import List, Optional
 
 
 from .models import User, Template, Gift, Campaign, CardResponse, CardsResponse, CampaignResponse, Card, Contact
@@ -256,6 +256,60 @@ class AMcardsClient:
 
         contact_json = res.json()
         return Contact._from_json(contact_json)
+
+    def create_contact(
+        self,
+        first_name: str,
+        last_name: str,
+        address_line_1: str,
+        city: str,
+        state: str,
+        postal_code: str,
+        country: Optional[str] = None,
+        notes: Optional[str] = None,
+        email: Optional[str] = None,
+        organization: Optional[str] = None,
+        phone: Optional[str] = None,
+        birth_year: Optional[str] = None,
+        birth_month: Optional[str] = None,
+        birth_day: Optional[str] = None,
+        anniversary_year: Optional[str] = None,
+        anniversary_month: Optional[str] = None,
+        anniversary_day: Optional[str] = None,
+    ) -> int:
+        """Creates a new contact for the client.
+
+        """
+        user_id = self.user().id
+        body = {
+            'first_name': first_name,
+            'last_name': last_name,
+            'address_line_1': address_line_1,
+            'city': city,
+            'state': state,
+            'postal_code': postal_code,
+            'owner': f'/.api/v1/user/{user_id}/',
+            'notes': '',
+            'groups': '',
+        }
+
+        if country is not None: body |= {'country': country}
+        if notes is not None: body |= {'notes': notes}
+        if email is not None: body |= {'email_address': email}
+        if organization is not None: body |= {'organization': organization}
+        if phone is not None: body |= {'phone_number': phone}
+        if birth_year is not None: body |= {'birth_year': birth_year}
+        if birth_month is not None: body |= {'birth_month': birth_month}
+        if birth_day is not None: body |= {'birth_day': birth_day}
+        if anniversary_year is not None: body |= {'anniversary_year': anniversary_year}
+        if anniversary_month is not None: body |= {'anniversary_month': anniversary_month}
+        if anniversary_day is not None: body |= {'anniversary_day': anniversary_day}
+
+        res = requests.post(url=f'{DOMAIN}/.api/v1/contact/', json=body, headers=self.HEADERS)
+        if not res.ok:
+            if res.status_code == 401:
+                raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
+            raise exceptions.AMcardsException('Something went wrong when trying to create a contact')
 
     def delete_contact(self, id: str | int) -> None:
         """Deletes client's AMcards contact with a specified id.
