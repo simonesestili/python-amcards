@@ -496,6 +496,166 @@ class Mailing:
     #         date_created=helpers.to_datetime(json['created']),
     #     )
 
+class Contact:
+    """Represents an AMcards contact."""
+    def __init__(
+        self,
+        id: int,
+        date_created: datetime,
+        date_last_modified: Optional[datetime],
+        date_last_card_send: Optional[datetime],
+        notes: Optional[str],
+        email: Optional[str],
+        first_name: str,
+        last_name: str,
+        address_line_1: str,
+        city: str,
+        state: str,
+        postal_code: str,
+        country: Optional[str],
+        organization: Optional[str],
+        phone: Optional[str],
+        birth_year: Optional[str],
+        birth_month: Optional[str],
+        birth_day: Optional[str],
+        anniversary_year: Optional[str],
+        anniversary_month: Optional[str],
+        anniversary_day: Optional[str],
+    ) -> None:
+        self._id = id
+        self._date_created = date_created
+        self._date_last_modified = date_last_modified
+        self._date_last_card_send = date_last_card_send
+        self._notes = notes
+        self._email = email
+        self._first_name = first_name
+        self._last_name = last_name
+        self._address_line_1 = address_line_1
+        self._city = city
+        self._state = state
+        self._postal_code = postal_code
+        self._country = country
+        self._organization = organization
+        self._phone = phone
+        self._birth_year = birth_year
+        self._birth_month = birth_month
+        self._birth_day = birth_day
+        self._anniversary_year = anniversary_year
+        self._anniversary_month = anniversary_month
+        self._anniversary_day = anniversary_day
+
+    __repr__ = helpers.repr
+
+    @property
+    def id(self) -> int:
+        return self._id
+
+    @property
+    def date_created(self) -> datetime:
+        return self._date_created
+
+    @property
+    def date_last_modified(self) -> Optional[datetime]:
+        return self._date_last_modified
+
+    @property
+    def date_last_card_send(self) -> Optional[datetime]:
+        return self._date_last_card_send
+
+    @property
+    def notes(self) -> Optional[str]:
+        return self._notes
+
+    @property
+    def email(self) -> Optional[str]:
+        return self._email
+
+    @property
+    def first_name(self) -> str:
+        return self._first_name
+
+    @property
+    def last_name(self) -> str:
+        return self._last_name
+
+    @property
+    def address_line_1(self) -> str:
+        return self._address_line_1
+
+    @property
+    def city(self) -> str:
+        return self._city
+
+    @property
+    def state(self) -> str:
+        return self._state
+
+    @property
+    def postal_code(self) -> str:
+        return self._postal_code
+
+    @property
+    def country(self) -> Optional[str]:
+        return self._country
+
+    @property
+    def organization(self) -> Optional[str]:
+        return self._organization
+
+    @property
+    def phone(self) -> Optional[str]:
+        return self._phone
+
+    @property
+    def birth_year(self) -> Optional[str]:
+        return self._birth_year
+
+    @property
+    def birth_month(self) -> Optional[str]:
+        return self._birth_month
+
+    @property
+    def birth_day(self) -> Optional[str]:
+        return self._birth_day
+
+    @property
+    def anniversary_year(self) -> Optional[str]:
+        return self._anniversary_year
+
+    @property
+    def anniversary_month(self) -> Optional[str]:
+        return self._anniversary_month
+
+    @property
+    def anniversary_day(self) -> Optional[str]:
+        return self._anniversary_day
+
+    @classmethod
+    def _from_json(cls, json: dict):
+        return cls(
+            id=json['id'],
+            date_created=helpers.to_datetime(json['added']),
+            date_last_modified=helpers.to_datetime(json['updated']),
+            date_last_card_send=helpers.to_datetime(json['last_card_send_date']),
+            notes=json['notes'] if json['notes'] else None,
+            email=json['email_address'] if json['email_address'] else None,
+            first_name=json['first_name'],
+            last_name=json['last_name'],
+            address_line_1=json['address_line_1'],
+            city=json['city'],
+            state=json['state'],
+            postal_code=json['postal_code'],
+            country=json['country'] if json['country'] else None,
+            organization=json['organization'] if json['organization'] else None,
+            phone=json['phone_number'] if json['phone_number'] else None,
+            birth_year=json['birth_year'] if json['birth_year'] else None,
+            birth_month=json['birth_month'] if json['birth_month'] else None,
+            birth_day=json['birth_day'] if json['birth_day'] else None,
+            anniversary_year=json['anniversary_year'] if json['anniversary_year'] else None,
+            anniversary_month=json['anniversary_month'] if json['anniversary_month'] else None,
+            anniversary_day=json['anniversary_day'] if json['anniversary_day'] else None,
+        )
+
 class CardResponse:
     """Represents AMcards' response for sending a single card."""
     def __init__(
