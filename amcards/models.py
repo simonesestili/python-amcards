@@ -628,27 +628,27 @@ class Contact:
 
     @property
     def birth_month(self) -> Optional[str]:
-        """Contact's birth month in the form ``"MM"``. ``None`` if contact doesnt' have a birth month."""
+        """Contact's birth month in the form ``"MM"``. ``None`` if contact doesn't have a birth month."""
         return self._birth_month
 
     @property
     def birth_day(self) -> Optional[str]:
-        """Contact's birth day in the form ``"DD"``. ``None`` if contact doesnt' have a birth day."""
+        """Contact's birth day in the form ``"DD"``. ``None`` if contact doesn't have a birth day."""
         return self._birth_day
 
     @property
     def anniversary_year(self) -> Optional[str]:
-        """Contact's anniversary year in the form ``"YYYY"``. ``None`` if contact doesnt' have an anniversary year."""
+        """Contact's anniversary year in the form ``"YYYY"``. ``None`` if contact doesn't have an anniversary year."""
         return self._anniversary_year
 
     @property
     def anniversary_month(self) -> Optional[str]:
-        """Contact's anniversary month in the form ``"MM"``. ``None`` if contact doesnt' have an anniversary month."""
+        """Contact's anniversary month in the form ``"MM"``. ``None`` if contact doesn't have an anniversary month."""
         return self._anniversary_month
 
     @property
     def anniversary_day(self) -> Optional[str]:
-        """Contact's anniversary day in the form ``"DD"``. ``None`` if contact doesnt' have an anniversary day."""
+        """Contact's anniversary day in the form ``"DD"``. ``None`` if contact doesn't have an anniversary day."""
         return self._anniversary_day
 
     @classmethod
