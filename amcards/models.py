@@ -633,7 +633,7 @@ class Contact:
     @classmethod
     def _from_json(cls, json: dict):
         return cls(
-            id=json['id'],
+            id=int(json['id']),
             date_created=helpers.to_datetime(json['added']),
             date_last_modified=helpers.to_datetime(json['updated']),
             date_last_card_send=helpers.to_datetime(json['last_card_send_date']),

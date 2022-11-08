@@ -2,7 +2,7 @@ import requests
 from typing import List
 
 
-from .models import User, Template, Gift, Campaign, CardResponse, CardsResponse, CampaignResponse, Card
+from .models import User, Template, Gift, Campaign, CardResponse, CardsResponse, CampaignResponse, Card, Contact
 from . import exceptions
 from . import __helpers as helpers
 
@@ -188,7 +188,7 @@ class AMcardsClient:
         cards_json = res.json().get('objects', [])
         return [Card._from_json(card_json) for card_json in cards_json]
 
-    def card(self, id: str | int) -> Campaign:
+    def card(self, id: str | int) -> Card:
         """Fetches client's AMcards card with a specified id.
 
         :param str or int id: Unique id for the :py:class:`card <amcards.models.Card>` you are fetching.
@@ -208,6 +208,54 @@ class AMcardsClient:
 
         card_json = res.json()
         return Card._from_json(card_json)
+
+    def contacts(self, limit: int = 25, skip: int = 0, filters: dict = None) -> List[Contact]:
+        """Fetches client's AMcards contacts.
+
+        :param int limit: Defaults to ``25``. Max number of contacts to be fetched.
+        :param int skip: Defaults to ``0``. Number of contacts to be skipped.
+        :param Optional[dict] filters: Defaults to ``None``. Filters to be applied when fetching contacts.
+
+            A common use case is to use ``filter = {'last_name': 'Smith'}``, this will fetch all contacts with ``last_name == 'Smith'``.
+
+        :return: The client's :py:class:`contacts <amcards.models.Contact>`.
+        :rtype: List[:py:class:`Contact <amcards.models.Contact>`]
+
+        :raises AuthenticationError: When the client's ``access_token`` is invalid.
+
+        """
+        params = {
+            'limit': limit,
+            'offset': skip,
+        } | (filters or {})
+
+        res = requests.get(url=f'{DOMAIN}/.api/v1/contact/', headers=self.HEADERS, params=params)
+        if not res.ok:
+            raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
+
+        contacts_json = res.json().get('objects', [])
+        return [Contact._from_json(contact_json) for contact_json in contacts_json]
+
+    def contact(self, id: str | int) -> Contact:
+        """Fetches client's AMcards contact with a specified id.
+
+        :param str or int id: Unique id for the :py:class:`contact <amcards.models.Contact>` you are fetching.
+
+        :return: The client's :py:class:`contact <amcards.models.Contact>` with specified ``id``.
+        :rtype: :py:class:`Contact <amcards.models.Contact>`
+
+        :raises ForbiddenContactError: When the contact for the specified ``id`` either does not exist or is not owned by the client's user.
+        :raises AuthenticationError: When the client's ``access_token`` is invalid.
+
+        """
+        res = requests.get(url=f'{DOMAIN}/.api/v1/contact/{id}/', headers=self.HEADERS)
+        if not res.ok:
+            if res.status_code in (403, 404):
+                raise exceptions.ForbiddenContactError('The contact for the specified id either does not exist or is not owned by the client\'s user')
+            raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
+
+        contact_json = res.json()
+        return Contact._from_json(contact_json)
 
     def send_card_cost(
         self,
