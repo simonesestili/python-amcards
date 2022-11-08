@@ -276,8 +276,29 @@ class AMcardsClient:
         anniversary_year: Optional[str] = None,
         anniversary_month: Optional[str] = None,
         anniversary_day: Optional[str] = None,
-    ) -> int:
+    ) -> None:
         """Creates a new contact for the client.
+
+        :param str first_name:
+        :param str last_name:
+        :param str address_line_1:
+        :param str city:
+        :param str state:
+        :param str postal_code:
+        :param Optional[str] country:
+        :param Optional[str] notes:
+        :param Optional[str] email:
+        :param Optional[str] organization:
+        :param Optional[str] phone:
+        :param Optional[str] birth_year:
+        :param Optional[str] birth_month:
+        :param Optional[str] birth_day:
+        :param Optional[str] anniverary_year:
+        :param Optional[str] anniverary_month:
+        :param Optional[str] anniverary_day:
+
+        :raises AMcardsException: When something unexpected occurs.
+        :raises AuthenticationError: When the client's ``access_token`` is invalid.
 
         """
         user_id = self.user().id
