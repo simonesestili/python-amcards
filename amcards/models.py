@@ -548,86 +548,107 @@ class Contact:
 
     @property
     def id(self) -> int:
+        """Contact's unique identifier."""
         return self._id
 
     @property
     def date_created(self) -> datetime:
+        """Date and time contact was created."""
         return self._date_created
 
     @property
     def date_last_modified(self) -> Optional[datetime]:
+        """Date and time contact was last modified. ``None`` if never modified."""
         return self._date_last_modified
 
     @property
     def date_last_card_send(self) -> Optional[datetime]:
+        """Date and time card was last sent to contact. ``None`` if card has never been sent to this contact."""
         return self._date_last_card_send
 
     @property
     def notes(self) -> Optional[str]:
+        """Contact's notes. ``None`` if contact has no notes."""
         return self._notes
 
     @property
     def email(self) -> Optional[str]:
+        """Contact's email address. ``None`` if contact doesn't have an email address."""
         return self._email
 
     @property
     def first_name(self) -> str:
+        """Contact's first name."""
         return self._first_name
 
     @property
     def last_name(self) -> str:
+        """Contact's last name."""
         return self._last_name
 
     @property
     def address_line_1(self) -> str:
+        """Contact's primary address line."""
         return self._address_line_1
 
     @property
     def city(self) -> str:
+        """Contact's city."""
         return self._city
 
     @property
     def state(self) -> str:
+        """Contact's state/province."""
         return self._state
 
     @property
     def postal_code(self) -> str:
+        """Contact's postal code."""
         return self._postal_code
 
     @property
     def country(self) -> Optional[str]:
+        """Contact's country. ``None`` if contact doesn't have a country."""
         return self._country
 
     @property
     def organization(self) -> Optional[str]:
+        """Contact's organization/company. ``None`` if contact doesn't have an organization."""
         return self._organization
 
     @property
     def phone(self) -> Optional[str]:
+        """Contact's phone number. ``None`` if contact doesn't have a phone number."""
         return self._phone
 
     @property
     def birth_year(self) -> Optional[str]:
+        """Contact's birth year in the form ``"YYYY"``. ``None`` if contact doesn't have a birth year."""
         return self._birth_year
 
     @property
     def birth_month(self) -> Optional[str]:
+        """Contact's birth month in the form ``"MM"``. ``None`` if contact doesnt' have a birth month."""
         return self._birth_month
 
     @property
     def birth_day(self) -> Optional[str]:
+        """Contact's birth day in the form ``"DD"``. ``None`` if contact doesnt' have a birth day."""
         return self._birth_day
 
     @property
     def anniversary_year(self) -> Optional[str]:
+        """Contact's anniversary year in the form ``"YYYY"``. ``None`` if contact doesnt' have an anniversary year."""
         return self._anniversary_year
 
     @property
     def anniversary_month(self) -> Optional[str]:
+        """Contact's anniversary month in the form ``"MM"``. ``None`` if contact doesnt' have an anniversary month."""
         return self._anniversary_month
 
     @property
     def anniversary_day(self) -> Optional[str]:
+        """Contact's anniversary day in the form ``"DD"``. ``None`` if contact doesnt' have an anniversary day."""
         return self._anniversary_day
 
     @classmethod
