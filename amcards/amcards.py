@@ -279,23 +279,23 @@ class AMcardsClient:
     ) -> None:
         """Creates a new contact for the client.
 
-        :param str first_name: .
-        :param str last_name: .
-        :param str address_line_1: .
-        :param str city: .
-        :param str state: .
-        :param str postal_code: .
-        :param Optional[str] country: .
-        :param Optional[str] notes: .
-        :param Optional[str] email: .
-        :param Optional[str] organization: .
-        :param Optional[str] phone: .
-        :param Optional[str] birth_year: .
-        :param Optional[str] birth_month: .
-        :param Optional[str] birth_day: .
-        :param Optional[str] anniverary_year: .
-        :param Optional[str] anniverary_month: .
-        :param Optional[str] anniverary_day: .
+        :param str first_name: Contact's first name.
+        :param str last_name: Contact's last name.
+        :param str address_line_1: Contact's primary address line.
+        :param str city: Contact's city.
+        :param str state: Contact's state.
+        :param str postal_code: Contact's postal code.
+        :param Optional[str] country: Contact's country.
+        :param Optional[str] notes: Contact's notes.
+        :param Optional[str] email: Contact's email address.
+        :param Optional[str] organization: Contact's organization.
+        :param Optional[str] phone: Contact's phone number. In the form ``"12223334444"``.
+        :param Optional[str] birth_year: Contact's birth year. In the form ``"YYYY"``.
+        :param Optional[str] birth_month: Contact's birth month. In the form ``"MM"``.
+        :param Optional[str] birth_day: Contact's birth day. In the form ``"DD"``.
+        :param Optional[str] anniverary_year: Contact's anniversary year. In the form ``"YYYY"``.
+        :param Optional[str] anniverary_month: Contact's anniversary month. In the form ``"MM"``.
+        :param Optional[str] anniverary_day: Contact's anniversary day. In the form ``"DD"``.
 
         :raises AMcardsException: When something unexpected occurs.
         :raises AuthenticationError: When the client's ``access_token`` is invalid.
