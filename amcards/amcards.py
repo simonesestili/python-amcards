@@ -257,6 +257,21 @@ class AMcardsClient:
         contact_json = res.json()
         return Contact._from_json(contact_json)
 
+    def delete_contact(self, id: str | int) -> None:
+        """Deletes client's AMcards contact with a specified id.
+
+        :param str or int id: Unique id for the :py:class:`contact <amcards.models.Contact>` you are deleting.
+
+        :raises ForbiddenContactError: When the contact for the specified ``id`` either does not exist or is not owned by the client's user.
+        :raises AuthenticationError: When the client's ``access_token`` is invalid.
+
+        """
+        res = requests.delete(url=f'{DOMAIN}/.api/v1/contact/{id}/', headers=self.HEADERS)
+        if not res.ok:
+            if res.status_code in (403, 404):
+                raise exceptions.ForbiddenContactError('The contact for the specified id either does not exist or is not owned by the client\'s user')
+            raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
+
     def send_card_cost(
         self,
         template_id: str | int,
