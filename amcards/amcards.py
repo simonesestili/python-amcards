@@ -522,6 +522,7 @@ class AMcardsClient:
         :return: AMcards' :py:class:`response <amcards.models.CardResponse>` for sending a single card.
         :rtype: :py:class:`CardResponse <amcards.models.CardResponse>`
 
+        :raises CardSendError: When something goes wrong when attempting to send a card.
         :raises AuthenticationError: When the client's ``access_token`` is invalid.
         :raises ForbiddenTemplateError: When the client does not own the :py:class:`template <amcards.models.Template>` specified by ``template_id``.
         :raises ShippingAddressError: When ``shipping_address`` is missing some `required` keys.
@@ -787,6 +788,7 @@ class AMcardsClient:
         :return: AMcards' :py:class:`response <amcards.models.CampaignResponse>` for sending a single drip campaign.
         :rtype: :py:class:`CampaignResponse <amcards.models.CampaignResponse>`
 
+        :raises CampaignSendError: When something goes wrong when attempting to send a drip campaign.
         :raises AuthenticationError: When the client's ``access_token`` is invalid.
         :raises ForbiddenCampaignError: When the client does not own the :py:class:`campaign <amcards.models.Campaign>` specified by ``campaign_id``.
         :raises ShippingAddressError: When ``shipping_address`` is missing some `required` keys.
@@ -959,6 +961,7 @@ class AMcardsClient:
         :return: AMcards' :py:class:`response <amcards.models.CardsResponse>` for sending multiple cards.
         :rtype: :py:class:`CardsResponse <amcards.models.CardsResponse>`
 
+        :raises CardsSendError: When something goes wrong when attempting to send cards.
         :raises AuthenticationError: When the client's ``access_token`` is invalid.
         :raises ForbiddenTemplateError: When the client does not own the :py:class:`template <amcards.models.Template>` specified by ``template_id``.
         :raises ShippingAddressError: When some items in ``shipping_addresses`` are missing some `required` keys.
