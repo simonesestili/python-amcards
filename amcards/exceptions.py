@@ -35,3 +35,12 @@ class PhoneFormatError(AMcardsException, ValueError):
 
 class DuplicateCampaignError(AMcardsException):
     """Duplicate campaign detected"""
+
+class CardSendError(AMcardsException):
+    """Something went wrong when attempting to send a card"""
+
+class CardsSendError(AMcardsException):
+    """Something went wrong when attempting to send cards"""
+
+class CampaignSendError(AMcardsException):
+    """Something went wrong when attempting to send a drip campaign"""

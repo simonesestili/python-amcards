@@ -563,6 +563,8 @@ class AMcardsClient:
 
         # Check for errors
         match res.status_code:
+            case 400:
+                raise exceptions.CardSendError('Something went wrong when attempting to send a card')
             case 401:
                 raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
             case 402:
@@ -841,6 +843,8 @@ class AMcardsClient:
 
         # Check for errors
         match res.status_code:
+            case 400:
+                raise exceptions.CampaignSendError('Something went wrong when attempting to send a drip campaign')
             case 401:
                 raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
             case 402:
@@ -1003,6 +1007,8 @@ class AMcardsClient:
 
         # Check for errors
         match res.status_code:
+            case 400:
+                raise exceptions.CardsSendError('Something went wrong when attempting to send cards')
             case 401:
                 raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
             case 402:
