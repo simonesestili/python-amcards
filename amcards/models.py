@@ -65,7 +65,7 @@ class User:
         return self._credits
 
     @property
-    def mail(self) -> str:
+    def email(self) -> str:
         """User's email address."""
         return self._email
 
