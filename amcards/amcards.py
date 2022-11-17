@@ -454,6 +454,7 @@ class AMcardsClient:
         shipping_address: dict,
         return_address: dict = None,
         send_date: str = None,
+        message: str = None,
     ) -> CardResponse:
         """Attempt to send a card.
 
@@ -518,6 +519,7 @@ class AMcardsClient:
                 }
 
         :param Optional[str] send_date: The date the card should be sent. If not specified, the card will be scheduled for the following day. The format should be: ``"YYYY-MM-DD"``.
+        :param Optional[str] message: A message to add to the card. This will be added to the inside bottom or inside right panel on the card and will not replace any message that is currently on the template.
 
         :return: AMcards' :py:class:`response <amcards.models.CardResponse>` for sending a single card.
         :rtype: :py:class:`CardResponse <amcards.models.CardResponse>`
@@ -559,6 +561,9 @@ class AMcardsClient:
 
         if send_date is not None:
             body |= {'send_date': send_date}
+
+        if message is not None:
+            body |= {'message': message}
 
         res = requests.post(f'{DOMAIN}/cards/open-card-form-oa/', json=body, headers=self.HEADERS)
 
