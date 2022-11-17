@@ -14,6 +14,7 @@ class User:
         first_name: str,
         last_name: str,
         credits: int,
+        email: str,
         date_joined: datetime,
         address_line_1: str,
         city: str,
@@ -29,6 +30,7 @@ class User:
         self._first_name = first_name
         self._last_name = last_name
         self._credits = credits
+        self._email = email
         self._date_joined = date_joined
         self._address_line_1 = address_line_1
         self._city = city
@@ -61,6 +63,11 @@ class User:
     def credits(self) -> int:
         """User's credit balance in `cents`."""
         return self._credits
+
+    @property
+    def mail(self) -> str:
+        """User's email address."""
+        return self._email
 
     @property
     def date_joined(self) -> datetime:
@@ -123,6 +130,7 @@ class User:
             first_name=json['first_name'],
             last_name=json['last_name'],
             credits=json['credits'],
+            email=json['email'],
             date_joined=helpers.to_datetime(json['date_joined']),
             address_line_1=json['address_line_1'],
             city=json['city'],
