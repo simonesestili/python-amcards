@@ -348,7 +348,7 @@ class Card:
 
     @property
     def send_date(self) -> str:
-        """The date the card is sent. If not specified, the card is scheduled for the day after it was created and the value will be ``None``. The format should be: ``"YYYY-MM-DD"``."""
+        """The date the card is sent. The format should be: ``"YYYY-MM-DD"``."""
         return self._send_date
 
     @property
