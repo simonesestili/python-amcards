@@ -307,6 +307,7 @@ class Card:
         date_last_modified: datetime,
         date_fulfilled: datetime,
         is_international: bool,
+        template_name: str,
         campaign_id: Optional[int],
         shipping_address: dict,
         return_address: dict,
@@ -320,6 +321,7 @@ class Card:
         self._date_last_modified = date_last_modified
         self._date_fulfilled = date_fulfilled
         self._is_international = is_international
+        self._template_name = template_name
         self._campaign_id = campaign_id
         self._shipping_address = shipping_address
         self._return_address = return_address
@@ -370,6 +372,11 @@ class Card:
     def is_international(self) -> bool:
         """If True, card was shipped international. If False, card was shipped domestic."""
         return self._is_international
+
+    @property
+    def template_name(self) -> str:
+        """Name of template for this card."""
+        return self._template_name
 
     @property
     def campaign_id(self) -> Optional[int]:
@@ -430,6 +437,7 @@ class Card:
             date_last_modified=helpers.to_datetime(json['last_modified']),
             date_fulfilled=helpers.to_datetime(json['fulfilled']),
             is_international=json['is_international'],
+            template_name=json['template_name'],
             campaign_id=json['campaign_pk'],
             shipping_address=helpers.parse_shipping_address(json),
             return_address=helpers.parse_return_address(json),
