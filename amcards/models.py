@@ -199,11 +199,13 @@ class Template:
         self,
         id: int,
         name: str,
+        message: str,
         thumbnail: str,
         gifts: List[Gift],
     ) -> None:
         self._id = id
         self._name = name
+        self._message = None if message == 'False' else message
         self._thumbnail = thumbnail
         self._gifts = gifts
         self._gifts_total = sum(gift.total_cost for gift in gifts)
@@ -219,6 +221,11 @@ class Template:
     def name(self) -> str:
         """Template's name."""
         return self._name
+
+    @property
+    def message(self) -> str:
+        """Template's message on default panel."""
+        return self._message
 
     @property
     def thumbnail(self) -> str:
@@ -240,6 +247,7 @@ class Template:
         return cls(
             id=json['id'],
             name=json['name'],
+            message=json['has_message_on_default_panel'],
             thumbnail=json['thumbnail'],
             gifts=[Gift._from_json(gift_json) for gift_json in json['gifts']],
         )
