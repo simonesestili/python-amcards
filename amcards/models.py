@@ -362,6 +362,16 @@ class Card:
         return self._send_date
 
     @property
+    def edit_link(self) -> str:
+        """This is the link to edit the card inside of AMcards.com."""
+        return f'https://amcards.com/cards/edit/{self._id}/'
+
+    @property
+    def cancel_link(self) -> str:
+        """This is the link to cancel the card inside of AMcards.com."""
+        return f'https://amcards.com/cards/cancel/{self._id}/'
+
+    @property
     def date_created(self) -> datetime:
         """Date and time card was created."""
         return self._date_created
