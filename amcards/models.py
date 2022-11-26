@@ -724,6 +724,16 @@ class CardResponse:
         return self._card_id
 
     @property
+    def edit_link(self) -> str:
+        """This is the link to edit the card inside of AMcards.com."""
+        return f'https://amcards.com/cards/edit/{self._card_id}/'
+
+    @property
+    def cancel_link(self) -> str:
+        """This is the link to cancel the card inside of AMcards.com."""
+        return f'https://amcards.com/cards/cancel/{self._card_id}/'
+
+    @property
     def total_cost(self) -> int:
         """Total cost the client's user was charged in `cents`."""
         return self._total_cost
@@ -775,6 +785,11 @@ class CampaignResponse:
     def mailing_id(self) -> int:
         """Unique id for the :py:class:`mailing <amcards.models.Mailing>` created."""
         return self._mailing_id
+
+    @property
+    def mailing_link(self) -> str:
+        """This is the link to the mailing list inside of AMcards.com."""
+        return f'https://amcards.com/cards/history/?mailing={self._mailing_id}'
 
     @property
     def card_ids(self) -> List[int]:
