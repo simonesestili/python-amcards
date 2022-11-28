@@ -490,6 +490,11 @@ class Mailing:
         return self._id
 
     @property
+    def mailing_link(self) -> str:
+        """This is the link to the mailing list inside of AMcards.com."""
+        return f'https://amcards.com/cards/history/?mailing={self._id}'
+
+    @property
     def amount_charged(self) -> int:
         """Total amount charged to client's user in `cents`."""
         return self._amount_charged
@@ -515,7 +520,7 @@ class Mailing:
     #     return cls(
     #         id=json['id'],
     #         amount_charged=int(json['amount_charged']),
-    #         status=CardStatus(json['status']),
+    #         status=MailingStatus(json['status']),
     #         date_created=helpers.to_datetime(json['created']),
     #     )
 
