@@ -15,6 +15,9 @@ class ForbiddenCampaignError(ForbiddenResourceError):
 class ForbiddenCardError(ForbiddenResourceError):
     """Card is not owned by clients' user"""
 
+class ForbiddenMailingError(ForbiddenResourceError):
+    """Mailing is not owned by clients' user"""
+
 class ForbiddenContactError(ForbiddenResourceError):
     """Contact is not owned by clients' user"""
 
