@@ -2,7 +2,7 @@ import requests
 from typing import List, Optional
 
 
-from .models import User, Template, Gift, Campaign, CardResponse, CardsResponse, CampaignResponse, Card, Contact
+from .models import User, Template, Gift, Campaign, CardResponse, CardsResponse, CampaignResponse, Card, Contact, Mailing
 from . import exceptions
 from . import __helpers as helpers
 
@@ -208,6 +208,27 @@ class AMcardsClient:
 
         card_json = res.json()
         return Card._from_json(card_json)
+
+    def mailing(self, id: str | int) -> Mailing:
+        """Fetches client's AMcards mailing with a specified id.
+
+        :param str or int id: Unique id for the :py:class:`mailing <amcards.models.Mailing>` you are fetching.
+
+        :return: The client's :py:class:`mailing <amcards.models.Mailing>` with specified ``id``.
+        :rtype: :py:class:`Mailing <amcards.models.Mailing>`
+
+        :raises ForbiddenMailingError: When the mailing for the specified ``id`` either does not exist or is not owned by the client's user.
+        :raises AuthenticationError: When the client's ``access_token`` is invalid.
+
+        """
+        res = requests.get(url=f'{DOMAIN}/.api/v1/mailing/{id}/', headers=self.HEADERS)
+        if not res.ok:
+            if res.status_code in (403, 404):
+                raise exceptions.ForbiddenMailingError('The mailing for the specified id either does not exist or is not owned by the client\'s user')
+            raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
+
+        mailing_json = res.json()
+        return Mailing._from_json(mailing_json)
 
     def contacts(self, limit: int = 25, skip: int = 0, filters: dict = None) -> List[Contact]:
         """Fetches client's AMcards contacts.
