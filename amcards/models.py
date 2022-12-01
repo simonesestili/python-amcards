@@ -514,15 +514,11 @@ class Mailing:
         """Date and time mailing was created."""
         return self._date_created
 
-    # @classmethod
-    # def _from_json(cls, json: dict):
-    #     recipients = json['report']['recipients']
-    #     return cls(
-    #         id=json['id'],
-    #         amount_charged=int(json['amount_charged']),
-    #         status=MailingStatus(json['status']),
-    #         date_created=helpers.to_datetime(json['created']),
-    #     )
+    @classmethod
+    def _from_json(cls, json: dict):
+        return cls(
+            id=json['id'],
+        )
 
 class Contact:
     """Represents an AMcards contact."""
