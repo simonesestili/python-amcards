@@ -471,16 +471,8 @@ class Mailing:
     def __init__(
         self,
         id: int,
-        amount_charged: int,
-        cards: List[Card],
-        status: MailingStatus,
-        date_created: datetime,
     ) -> None:
         self._id = id
-        self._amount_charged = amount_charged
-        self._cards = cards
-        self._status = status
-        self._date_created = date_created
 
     __repr__ = helpers.repr
 
@@ -493,26 +485,6 @@ class Mailing:
     def mailing_link(self) -> str:
         """This is the link to the mailing list inside of AMcards.com."""
         return f'https://amcards.com/cards/history/?mailing={self._id}'
-
-    @property
-    def amount_charged(self) -> int:
-        """Total amount charged to client's user in `cents`."""
-        return self._amount_charged
-
-    @property
-    def cards(self) -> List[Card]:
-        """All cards that are a part of this mailing."""
-        return self._cards
-
-    @property
-    def status(self) -> MailingStatus:
-        """Current status of mailing."""
-        return self._status
-
-    @property
-    def date_created(self) -> datetime:
-        """Date and time mailing was created."""
-        return self._date_created
 
     @classmethod
     def _from_json(cls, json: dict):
