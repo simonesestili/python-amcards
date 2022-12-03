@@ -8,7 +8,6 @@ REQUIRED_SHIPPING_ADDRESS_FIELDS = {
     'city',
     'state',
     'postal_code',
-    'country',
 }
 
 CARD_OPTIONAL_SHIPPING_ADDRESS_FIELDS = {
