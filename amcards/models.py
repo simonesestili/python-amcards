@@ -316,7 +316,7 @@ class Card:
         date_fulfilled: datetime,
         is_international: bool,
         template_name: str,
-        template_url: str,
+        thumbnail: str,
         campaign_id: Optional[int],
         shipping_address: dict,
         return_address: dict,
@@ -331,7 +331,7 @@ class Card:
         self._date_fulfilled = date_fulfilled
         self._is_international = is_international
         self._template_name = template_name
-        self._template_url = template_url
+        self._thumbnail = thumbnail
         self._campaign_id = campaign_id
         self._shipping_address = shipping_address
         self._return_address = return_address
@@ -399,9 +399,9 @@ class Card:
         return self._template_name
 
     @property
-    def template_url(self) -> str:
-        """Url of template for this card."""
-        return self._template_url
+    def thumbnail(self) -> str:
+        """Url of thumbnail for this card."""
+        return self._thumbnail
 
     @property
     def campaign_id(self) -> Optional[int]:
@@ -463,7 +463,7 @@ class Card:
             date_fulfilled=helpers.to_datetime(json['fulfilled']),
             is_international=json['is_international'],
             template_name=json['template_name'],
-            template_url=json['template_url'],
+            thumbnail=json['thumbnail_url'],
             campaign_id=json['campaign_pk'],
             shipping_address=helpers.parse_shipping_address(json),
             return_address=helpers.parse_return_address(json),
