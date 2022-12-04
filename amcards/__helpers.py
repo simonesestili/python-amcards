@@ -11,11 +11,13 @@ REQUIRED_SHIPPING_ADDRESS_FIELDS = {
 }
 
 CARD_OPTIONAL_SHIPPING_ADDRESS_FIELDS = {
+    'country',
     'organization',
     'third_party_contact_id',
 }
 
 CAMPAIGN_OPTIONAL_SHIPPING_ADDRESS_FIELDS = {
+    'country',
     'organization',
     'phone_number',
     'birth_date',
@@ -85,14 +87,14 @@ def is_valid_phone(phone: str) -> bool:
 def sanitize_shipping_address_for_card_send(shipping_address: dict) -> dict:
     sanitized_shipping_address = {field: shipping_address[field] for field in REQUIRED_SHIPPING_ADDRESS_FIELDS}
     for optional in CARD_OPTIONAL_SHIPPING_ADDRESS_FIELDS:
-        if optional not in shipping_address: continue
+        if not shipping_address.get(optional): continue
         sanitized_shipping_address[optional] = shipping_address[optional]
     return sanitized_shipping_address
 
 def sanitize_shipping_address_for_campaign_send(shipping_address: dict) -> dict:
     sanitized_shipping_address = {field: shipping_address[field] for field in REQUIRED_SHIPPING_ADDRESS_FIELDS}
     for optional in CAMPAIGN_OPTIONAL_SHIPPING_ADDRESS_FIELDS:
-        if optional not in shipping_address: continue
+        if not shipping_address.get(optional): continue
         sanitized_shipping_address[optional] = shipping_address[optional]
     return sanitized_shipping_address
 
