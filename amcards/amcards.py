@@ -22,7 +22,7 @@ class AMcardsClient:
     def __init__(self, access_token: str, oauth_config: Optional[dict] = None, callback: Optional[Callable[[str, str, int], Any]] = None) -> None:
         """Client for AMcards API.
 
-        :param str access_token: Your AMcards access token. Generate one at https://amcards.com/user/generate-access-token/.
+        :param str access_token: Your AMcards access token. Generate one `here <https://amcards.com/user/generate-access-token/>`_.
         :param Optional[dict] oauth_config: Your OAuth configuration, this is optional, but if you choose to include it, it must include all of the following keys:
 
             .. code-block::

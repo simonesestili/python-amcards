@@ -20,7 +20,7 @@ First, create an :ref:`AMcardsClient <amcards.AMcardsClient>` as follows:
     >>> from amcards import AMcardsClient
     >>> client = AMcardsClient('youraccesstoken')
 
-Here ``'youraccesstoken'`` will be replaced with a string containing your AMcards access token. You can generate one `here <https://amcards.com/user/connected-applications/>`_.
+Here ``'youraccesstoken'`` will be replaced with a string containing your AMcards access token. You can generate one `here <https://amcards.com/user/generate-access-token/>`_.
 
 Now we can perform all operations supported by the :ref:`client <amcards.AMcardsClient>`.
 
