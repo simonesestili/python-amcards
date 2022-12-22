@@ -73,7 +73,7 @@ class AMcardsClient:
             )
 
     @property
-    def HEADERS(self) -> dict:
+    def _HEADERS(self) -> dict:
         if self._token_expired():
             self._refresh_token()
 
@@ -90,7 +90,7 @@ class AMcardsClient:
         :raises AuthenticationError: When the client's ``access_token`` is invalid.
 
         """
-        res = requests.get(url=f'{DOMAIN}/.api/v1/user/', headers=self.HEADERS)
+        res = requests.get(url=f'{DOMAIN}/.api/v1/user/', headers=self._HEADERS)
         if not res.ok:
             raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
 
@@ -109,7 +109,7 @@ class AMcardsClient:
         :raises AuthenticationError: When the client's ``access_token`` is invalid.
 
         """
-        res = requests.get(url=f'{DOMAIN}/.api/v1/template/', headers=self.HEADERS, params={'limit': limit, 'offset': skip})
+        res = requests.get(url=f'{DOMAIN}/.api/v1/template/', headers=self._HEADERS, params={'limit': limit, 'offset': skip})
         if not res.ok:
             raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
 
@@ -128,7 +128,7 @@ class AMcardsClient:
         :raises AuthenticationError: When the client's ``access_token`` is invalid.
 
         """
-        res = requests.get(url=f'{DOMAIN}/.api/v1/template/{id}/', headers=self.HEADERS)
+        res = requests.get(url=f'{DOMAIN}/.api/v1/template/{id}/', headers=self._HEADERS)
         if not res.ok:
             if res.status_code in (403, 404):
                 raise exceptions.ForbiddenTemplateError('The template for the specified id either does not exist or is not owned by the client\'s user')
@@ -149,7 +149,7 @@ class AMcardsClient:
         :raises AuthenticationError: When the client's ``access_token`` is invalid.
 
         """
-        res = requests.get(url=f'{DOMAIN}/.api/v1/quicksendtemplate/', headers=self.HEADERS, params={'limit': limit, 'offset': skip})
+        res = requests.get(url=f'{DOMAIN}/.api/v1/quicksendtemplate/', headers=self._HEADERS, params={'limit': limit, 'offset': skip})
         if not res.ok:
             raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
 
@@ -168,7 +168,7 @@ class AMcardsClient:
         :raises AuthenticationError: When the client's ``access_token`` is invalid.
 
         """
-        res = requests.get(url=f'{DOMAIN}/.api/v1/quicksendtemplate/{id}/', headers=self.HEADERS)
+        res = requests.get(url=f'{DOMAIN}/.api/v1/quicksendtemplate/{id}/', headers=self._HEADERS)
         if not res.ok:
             if res.status_code in (403, 404):
                 raise exceptions.ForbiddenTemplateError('The quicksend template for the specified id either does not exist or is not owned by the client\'s user')
@@ -189,7 +189,7 @@ class AMcardsClient:
         :raises AuthenticationError: When the client's ``access_token`` is invalid.
 
         """
-        res = requests.get(url=f'{DOMAIN}/.api/v1/campaign/', headers=self.HEADERS, params={'limit': limit, 'offset': skip})
+        res = requests.get(url=f'{DOMAIN}/.api/v1/campaign/', headers=self._HEADERS, params={'limit': limit, 'offset': skip})
         if not res.ok:
             raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
 
@@ -208,7 +208,7 @@ class AMcardsClient:
         :raises AuthenticationError: When the client's ``access_token`` is invalid.
 
         """
-        res = requests.get(url=f'{DOMAIN}/.api/v1/campaign/{id}/', headers=self.HEADERS)
+        res = requests.get(url=f'{DOMAIN}/.api/v1/campaign/{id}/', headers=self._HEADERS)
         if not res.ok:
             if res.status_code in (403, 404):
                 raise exceptions.ForbiddenCampaignError('The drip campaign for the specified id either does not exist or is not owned by the client\'s user')
@@ -237,7 +237,7 @@ class AMcardsClient:
             'offset': skip,
         } | (filters or {})
 
-        res = requests.get(url=f'{DOMAIN}/.api/v1/card/', headers=self.HEADERS, params=params)
+        res = requests.get(url=f'{DOMAIN}/.api/v1/card/', headers=self._HEADERS, params=params)
         if not res.ok:
             raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
 
@@ -256,7 +256,7 @@ class AMcardsClient:
         :raises AuthenticationError: When the client's ``access_token`` is invalid.
 
         """
-        res = requests.get(url=f'{DOMAIN}/.api/v1/card/{id}/', headers=self.HEADERS)
+        res = requests.get(url=f'{DOMAIN}/.api/v1/card/{id}/', headers=self._HEADERS)
         if not res.ok:
             if res.status_code in (403, 404):
                 raise exceptions.ForbiddenCardError('The card for the specified id either does not exist or is not owned by the client\'s user')
@@ -277,7 +277,7 @@ class AMcardsClient:
         :raises AuthenticationError: When the client's ``access_token`` is invalid.
 
         """
-        res = requests.get(url=f'{DOMAIN}/.api/v1/mailing/{id}/', headers=self.HEADERS)
+        res = requests.get(url=f'{DOMAIN}/.api/v1/mailing/{id}/', headers=self._HEADERS)
         if not res.ok:
             if res.status_code in (403, 404):
                 raise exceptions.ForbiddenMailingError('The mailing for the specified id either does not exist or is not owned by the client\'s user')
@@ -306,7 +306,7 @@ class AMcardsClient:
             'offset': skip,
         } | (filters or {})
 
-        res = requests.get(url=f'{DOMAIN}/.api/v1/contact/', headers=self.HEADERS, params=params)
+        res = requests.get(url=f'{DOMAIN}/.api/v1/contact/', headers=self._HEADERS, params=params)
         if not res.ok:
             raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
 
@@ -325,7 +325,7 @@ class AMcardsClient:
         :raises AuthenticationError: When the client's ``access_token`` is invalid.
 
         """
-        res = requests.get(url=f'{DOMAIN}/.api/v1/contact/{id}/', headers=self.HEADERS)
+        res = requests.get(url=f'{DOMAIN}/.api/v1/contact/{id}/', headers=self._HEADERS)
         if not res.ok:
             if res.status_code in (403, 404):
                 raise exceptions.ForbiddenContactError('The contact for the specified id either does not exist or is not owned by the client\'s user')
@@ -403,7 +403,7 @@ class AMcardsClient:
         if anniversary_month is not None: body |= {'anniversary_month': anniversary_month}
         if anniversary_day is not None: body |= {'anniversary_day': anniversary_day}
 
-        res = requests.post(url=f'{DOMAIN}/.api/v1/contact/', json=body, headers=self.HEADERS)
+        res = requests.post(url=f'{DOMAIN}/.api/v1/contact/', json=body, headers=self._HEADERS)
         if not res.ok:
             if res.status_code == 401:
                 raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
@@ -418,7 +418,7 @@ class AMcardsClient:
         :raises AuthenticationError: When the client's ``access_token`` is invalid.
 
         """
-        res = requests.delete(url=f'{DOMAIN}/.api/v1/contact/{id}/', headers=self.HEADERS)
+        res = requests.delete(url=f'{DOMAIN}/.api/v1/contact/{id}/', headers=self._HEADERS)
         if not res.ok:
             if res.status_code in (403, 404):
                 raise exceptions.ForbiddenContactError('The contact for the specified id either does not exist or is not owned by the client\'s user')
@@ -642,7 +642,7 @@ class AMcardsClient:
         if message is not None:
             body |= {'message': message}
 
-        res = requests.post(f'{DOMAIN}/cards/open-card-form-oa/', json=body, headers=self.HEADERS)
+        res = requests.post(f'{DOMAIN}/cards/open-card-form-oa/', json=body, headers=self._HEADERS)
 
         # Check for errors
         match res.status_code:
@@ -781,7 +781,7 @@ class AMcardsClient:
             body['recipients'][0]['birth_day'] = shipping_address['birth_date'][-2:]
             body['recipients'][0]['birth_month'] = shipping_address['birth_date'][-5:-3]
 
-        res = requests.post(f'{DOMAIN}/campaigns/calculate-campaign-price/', json=body, headers=self.HEADERS)
+        res = requests.post(f'{DOMAIN}/campaigns/calculate-campaign-price/', json=body, headers=self._HEADERS)
 
         # Check for errors
         match res.status_code:
@@ -923,7 +923,7 @@ class AMcardsClient:
         if send_date is not None:
             body |= {'send_date': send_date}
 
-        res = requests.post(f'{DOMAIN}/campaigns/open-campaign-form/', json=body, headers=self.HEADERS)
+        res = requests.post(f'{DOMAIN}/campaigns/open-campaign-form/', json=body, headers=self._HEADERS)
 
         # Check for errors
         match res.status_code:
@@ -1088,7 +1088,7 @@ class AMcardsClient:
         if send_date is not None:
             body |= {'send_type': 'specific_date', 'send_date': send_date}
 
-        res = requests.post(f'{DOMAIN}/cards/open-mailing-form/', json=body, headers=self.HEADERS)
+        res = requests.post(f'{DOMAIN}/cards/open-mailing-form/', json=body, headers=self._HEADERS)
 
         # Check for errors
         match res.status_code:
