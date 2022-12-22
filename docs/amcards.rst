@@ -6,6 +6,7 @@ amcards.AMcardsClient
 
 .. autoclass:: amcards.amcards.AMcardsClient
    :members:
+   :special-members: __init__
    :undoc-members:
    :show-inheritance:
 
