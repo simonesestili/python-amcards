@@ -1,3 +1,4 @@
+import time
 from typing import Optional
 from datetime import datetime
 
@@ -34,6 +35,9 @@ OPTIONAL_RETURN_ADDRESS_FIELDS = {
     'postal_code',
     'country',
 }
+
+def current_timestamp() -> int:
+    return int(time.time() * 1000)
 
 def today() -> str:
     today = datetime.today()
