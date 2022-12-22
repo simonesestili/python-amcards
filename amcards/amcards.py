@@ -62,7 +62,7 @@ class AMcardsClient:
         res_json = res.json()
         self._access_token = res_json['access_token']
         self._oauth_config['refresh_token'] = res_json['refresh_token']
-        self._oauth_config['expiration'] = res_json['expiration']
+        self._oauth_config['expiration'] = helpers.current_timestamp() + res_json['expires_in'] * 1000
 
         # If specified, call the callback
         if self._callback is not None:
