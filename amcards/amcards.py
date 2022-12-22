@@ -1,5 +1,5 @@
 import requests
-from typing import List, Optional
+from typing import List, Optional, Callable, Any
 
 
 from .models import User, Template, Gift, Campaign, CardResponse, CardsResponse, CampaignResponse, Card, Contact, Mailing
@@ -19,10 +19,66 @@ FIXED_COUNTRY = {
 
 class AMcardsClient:
     """Client for AMcards API."""
-    def __init__(self, access_token: str) -> None:
+    def __init__(self, access_token: str, oauth_config: Optional[dict] = None, callback: Optional[Callable[[str, str, int], Any]] = None) -> None:
+        """Client for AMcards API.
+
+        :param str access_token: Your AMcards access token. Generate one at https://amcards.com/user/generate-access-token/.
+        :param Optional[dict] oauth_config: Your OAuth configuration, this is optional, but if you choose to include it, it must include all of the following keys:
+
+            .. code-block::
+
+                {
+                    'refresh_token': 'yourrefreshtoken',
+                    'expiration': 1671692131130,                    # Note that expiration is specified as a unix timestamp in ms.
+                    'client_id': 'yourapplicationclientid',
+                    'client_secret': 'yourapplicationclientsecret'
+                }
+
+        :param Optional[Callable[[str, str, int], Any]] callback: This function will be called by the client when you have `oauth_config` defined, and the client refreshes the `access_token` before making a request. This can be useful when you need perform some logic when the client refreshes the specified `access_token` (like updating your database to reflect the new access_token and refresh_token). `callback` is optional, but if you choose to include it, it needs to accept the following keyword arguments: `access_token` `refresh_token` `expiration`. `callback` will be called by the client as follows: `callback(access_token='newaccesstoken', refresh_token='newrefreshtoken', expiration=1671692135130`, note that `expiration` is specified as a unix timestamp in ms.
+
+        """
         self._access_token = access_token
-        self.HEADERS = {
-            'Authorization': f'Bearer {access_token}',
+        self._oauth_config = oauth_config
+        self._callback = callback
+
+    def _token_expired(self) -> bool:
+        return self._oauth_config is not None and helpers.current_timestamp() >= self._oauth_config['expiration']
+
+    def _refresh_token(self) -> None:
+        # Refresh the tokens
+        payload = {
+            'grant_type': 'refresh_token',
+            'refresh_token': self._oauth_config['refresh_token'],
+            'client_id': self._oauth_config['client_id'],
+            'client_secret': self._oauth_config['client_secret'],
+        }
+        res = requests.post(url=f'{DOMAIN}/oauth2/token/', data=payload)
+
+        # Make sure the refresh was successful
+        if not res.ok:
+            raise exceptions.OAuthTokenRefreshError('Something went wrong when attempting to refresh AMcards access_token')
+
+        # Update the access_token, refresh_token, and expiration
+        res_json = res.json()
+        self._access_token = res_json['access_token']
+        self._oauth_config['refresh_token'] = res_json['refresh_token']
+        self._oauth_config['expiration'] = res_json['expiration']
+
+        # If specified, call the callback
+        if self._callback is not None:
+            self._callback(
+                access_token=self._access_token,
+                refresh_token=self._oauth_config['refresh_token'],
+                expiration=self._oauth_config['expiration'],
+            )
+
+    @property
+    def HEADERS(self) -> dict:
+        if self._token_expired():
+            self._refresh_token()
+
+        return {
+            'Authorization': f'Bearer {self._access_token}',
         }
 
     def user(self) -> User:
