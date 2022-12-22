@@ -34,7 +34,7 @@ class AMcardsClient:
                     'client_secret': 'yourapplicationclientsecret'
                 }
 
-        :param Optional[Callable[[str, str, int], Any]] callback: This function will be called by the client when you have `oauth_config` defined, and the client refreshes the `access_token` before making a request. This can be useful when you need perform some logic when the client refreshes the specified `access_token` (like updating your database to reflect the new access_token and refresh_token). `callback` is optional, but if you choose to include it, it needs to accept the following keyword arguments: `access_token` `refresh_token` `expiration`. `callback` will be called by the client as follows: `callback(access_token='newaccesstoken', refresh_token='newrefreshtoken', expiration=1671692135130`, note that `expiration` is specified as a unix timestamp in ms.
+        :param Optional[Callable[[str, str, int], Any]] callback: This function will be called by the client when you have ``oauth_config`` defined, and the client refreshes the ``access_token`` before making a request. This can be useful when you need perform some logic when the client refreshes the specified ``access_token`` (like updating your database to reflect the new access_token and refresh_token). ``callback`` is optional, but if you choose to include it, it needs to accept the following keyword arguments: ``access_token`` ``refresh_token`` ``expiration``. ``callback`` will be called by the client as follows: ``callback(access_token='newaccesstoken', refresh_token='newrefreshtoken', expiration=1671692135130)``, note that ``expiration`` is specified as a unix timestamp in ms.
 
         """
         self._access_token = access_token
