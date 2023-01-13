@@ -259,10 +259,14 @@ class Campaign:
         id: int,
         name: str,
         send_if_duplicate: bool,
+        has_anniversary_drip: bool = False,
+        has_birthday_drip: bool = False,
     ) -> None:
         self._id = id
         self._name = name
         self._send_if_duplicate = send_if_duplicate
+        self._has_anniversary_drip = has_anniversary_drip
+        self._has_birthday_drip = has_birthday_drip
 
     __repr__ = helpers.repr
 
@@ -281,12 +285,24 @@ class Campaign:
         """If True, AMcards will not attempt to detect and prevent duplicates. Otherwise, if this campaign has been previously sent to a contact, further campaign send attempts to the same contact will be prevented."""
         return self._send_if_duplicate
 
+    @property
+    def has_anniversary_drip(self) -> bool:
+        """True if one of more drips in this campaign are anniversary drips. False otherwise."""
+        return self._has_anniversary_drip
+
+    @property
+    def has_birthday_drip(self) -> bool:
+        """True if one of more drips in this campaign are birthday drips. False otherwise."""
+        return self._has_birthday_drip
+
     @classmethod
     def _from_json(cls, json: dict):
         return cls(
             id=json['id'],
             name=json['title'],
             send_if_duplicate=json['send_even_if_duplicate'],
+            has_anniversary_drip=json['has_anniversary_drip'],
+            has_birthday_drip=json['has_birthday_drip'],
         )
 
 class CardStatus(Enum):
