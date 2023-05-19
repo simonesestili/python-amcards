@@ -88,6 +88,13 @@ def is_valid_phone(phone: str) -> bool:
     if not isinstance(phone, str): return False
     return len(phone) == 10 and phone.isdigit()
 
+def is_valid_extra_data(extra_data: dict) -> bool:
+    if not isinstance(extra_data, dict): return False
+    for key, value in extra_data.items():
+        if not isinstance(key, str): return False
+        if not isinstance(value, str): return False
+    return True
+
 def sanitize_shipping_address_for_card_send(shipping_address: dict) -> dict:
     sanitized_shipping_address = {field: shipping_address[field] for field in REQUIRED_SHIPPING_ADDRESS_FIELDS}
     for optional in CARD_OPTIONAL_SHIPPING_ADDRESS_FIELDS:
