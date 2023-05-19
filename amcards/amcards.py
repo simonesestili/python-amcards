@@ -799,6 +799,7 @@ class AMcardsClient:
         shipping_address: dict,
         return_address: dict = None,
         send_date: str = None,
+        extra_data: dict = None,
     ) -> CampaignResponse:
         """Attempt to send a drip campaign.
 
@@ -866,6 +867,13 @@ class AMcardsClient:
                 }
 
         :param Optional[str] send_date: The date the drip campaign should be sent, in ``"YYYY-MM-DD"`` format. If not specified, the drip campaign will be scheduled for the following day.
+        :param Optional[dict] extra_data: Extra data for merge fields. This is useful when you want to dynamically pass custom data to your templates. For example, if you pass in the example JSON, you would want to have your template contain a merge field in the form of *|data.carMake|*
+
+            .. code-block::
+
+                {
+                    'carMake': 'Honda',                      # OPTIONAL
+                }
 
         :return: AMcards' :py:class:`response <amcards.models.CampaignResponse>` for sending a single drip campaign.
         :rtype: :py:class:`CampaignResponse <amcards.models.CampaignResponse>`
@@ -910,6 +918,10 @@ class AMcardsClient:
         if 'phone_number' in shipping_address and not helpers.is_valid_phone(shipping_address['phone_number']):
             error_message = 'Invalid phone_number format, please specify phone as a 10 number string with no special formatting (ex. 15556667777), or omit it'
             raise exceptions.PhoneFormatError(error_message)
+        # Validate extra_data
+        if extra_data is not None and not helpers.is_valid_extra_data(extra_data):
+            error_message = 'Invalid extra_data format. Make sure extra_data is a valid dict with all keys and values of type str.'
+            raise exceptions.ExtraDataFormatError(error_message)
 
         # Build request json payload
         body = {
@@ -922,6 +934,9 @@ class AMcardsClient:
 
         if send_date is not None:
             body |= {'send_date': send_date}
+
+        if extra_data is not None:
+            body |= {'extra_data': extra_data}
 
         res = requests.post(f'{DOMAIN}/campaigns/open-campaign-form/', json=body, headers=self._HEADERS)
 
