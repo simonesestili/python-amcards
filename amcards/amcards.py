@@ -918,10 +918,8 @@ class AMcardsClient:
         if 'phone_number' in shipping_address and not helpers.is_valid_phone(shipping_address['phone_number']):
             error_message = 'Invalid phone_number format, please specify phone as a 10 number string with no special formatting (ex. 15556667777), or omit it'
             raise exceptions.PhoneFormatError(error_message)
-        # Validate extra_data
-        if extra_data is not None and not helpers.is_valid_extra_data(extra_data):
-            error_message = 'Invalid extra_data format. Make sure extra_data is a valid dict with all keys and values of type str.'
-            raise exceptions.ExtraDataFormatError(error_message)
+        # Sanitize extra_data
+        extra_data = helpers.sanitize_extra_data(extra_data)
 
         # Build request json payload
         body = {
