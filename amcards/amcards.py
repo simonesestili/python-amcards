@@ -532,6 +532,7 @@ class AMcardsClient:
         return_address: dict = None,
         send_date: str = None,
         message: str = None,
+        extra_data: dict = None,
     ) -> CardResponse:
         """Attempt to send a card.
 
@@ -597,6 +598,13 @@ class AMcardsClient:
 
         :param Optional[str] send_date: The date the card should be sent. If not specified, the card will be scheduled for the following day. The format should be: ``"YYYY-MM-DD"``.
         :param Optional[str] message: A message to add to the card. This will be added to the inside bottom or inside right panel on the card and will not replace any message that is currently on the template.
+        :param Optional[dict] extra_data: Extra data for merge fields. This is useful when you want to dynamically pass custom data to your templates. For example, if you pass in the example JSON, you would want to have your template contain a merge field in the form of *|data.carMake|*
+
+            .. code-block::
+
+                {
+                    'carMake': 'Honda',                      # OPTIONAL
+                }
 
         :return: AMcards' :py:class:`response <amcards.models.CardResponse>` for sending a single card.
         :rtype: :py:class:`CardResponse <amcards.models.CardResponse>`
@@ -627,6 +635,9 @@ class AMcardsClient:
             # prefix return address fields with return_
             return_address = {f'return_{key}': value for key, value in return_address.items()}
 
+        # Sanitize extra_data
+        extra_data = helpers.sanitize_extra_data(extra_data)
+
         # Build request json payload
         body = {
             'template_id': template_id,
@@ -641,6 +652,9 @@ class AMcardsClient:
 
         if message is not None:
             body |= {'message': message}
+
+        if extra_data is not None:
+            body |= {'extra_data': extra_data}
 
         res = requests.post(f'{DOMAIN}/cards/open-card-form-oa/', json=body, headers=self._HEADERS)
 
