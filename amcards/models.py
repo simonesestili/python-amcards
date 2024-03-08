@@ -487,7 +487,7 @@ class Card:
             date_fulfilled=helpers.to_datetime(json['fulfilled']),
             is_international=json['is_international'],
             template_name=json['template_name'],
-            thumbnail=json['thumbnail_url'],
+            thumbnail=json['thumbnail'],
             campaign_id=json['campaign_pk'],
             shipping_address=helpers.parse_shipping_address(json),
             return_address=helpers.parse_return_address(json),
