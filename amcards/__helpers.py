@@ -15,6 +15,7 @@ CARD_OPTIONAL_SHIPPING_ADDRESS_FIELDS = {
     'country',
     'organization',
     'third_party_contact_id',
+    'address_line_2',
 }
 
 CAMPAIGN_OPTIONAL_SHIPPING_ADDRESS_FIELDS = {
@@ -24,6 +25,7 @@ CAMPAIGN_OPTIONAL_SHIPPING_ADDRESS_FIELDS = {
     'birth_date',
     'anniversary_date',
     'third_party_contact_id',
+    'address_line_2',
 }
 
 OPTIONAL_RETURN_ADDRESS_FIELDS = {
