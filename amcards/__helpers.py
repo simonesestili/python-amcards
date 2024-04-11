@@ -73,7 +73,7 @@ def format_cents(price_in_cents: int) -> str:
 def get_missing_required_shipping_address_fields(shipping_address: dict) -> list:
     missings = []
     for req in REQUIRED_SHIPPING_ADDRESS_FIELDS:
-        if shipping_address.get(req, '').strip(): continue
+        if (shipping_address.get(req, '') or '').strip(): continue
         missings.append(req)
     return missings
 
