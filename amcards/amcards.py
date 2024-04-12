@@ -579,7 +579,8 @@ class AMcardsClient:
                     'postal_code': '48075',
                     'country': 'US',
                     'organization': 'Google',                # OPTIONAL
-                    'third_party_contact_id': 'crmid1453131' # OPTIONAL
+                    'third_party_contact_id': 'crmid1453131',# OPTIONAL
+                    'address_line_2': 'Apt 2'                # OPTIONAL
                 }
 
         :param Optional[dict] return_address: Dict of return details that will override the client's AMcards user default return details. Here's an example how the dict might look, all of the keys are optional:
@@ -863,7 +864,8 @@ class AMcardsClient:
                     'phone_number': '15556667777',           # OPTIONAL
                     'birth_date': '2003-12-25',              # OPTIONAL
                     'anniversary_date': '2022-10-31',        # OPTIONAL
-                    'third_party_contact_id': 'crmid1453131' # OPTIONAL
+                    'third_party_contact_id': 'crmid1453131',# OPTIONAL
+                    'address_line_2': 'Apt 2'                # OPTIONAL
                 }
 
         :param Optional[dict] return_address: Dict of return details that will override the client's AMcards user default return details. Here's an example how the dict might look, all of the keys are optional:
