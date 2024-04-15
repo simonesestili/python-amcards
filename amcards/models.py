@@ -344,6 +344,7 @@ class Card:
         campaign_id: Optional[int],
         shipping_address: dict,
         return_address: dict,
+        gifts: List[Gift],
     ) -> None:
         self._id = id
         self._amount_charged = amount_charged
@@ -359,6 +360,7 @@ class Card:
         self._campaign_id = campaign_id
         self._shipping_address = shipping_address
         self._return_address = return_address
+        self._gifts = gifts
 
     __repr__ = helpers.repr
 
@@ -474,6 +476,11 @@ class Card:
         """
         return self._return_address
 
+    @property
+    def gifts(self) -> List[Gift]:
+        """Gifts attached to this card."""
+        return self._gifts
+
     @classmethod
     def _from_json(cls, json: dict):
         return cls(
@@ -491,6 +498,12 @@ class Card:
             campaign_id=json['campaign_pk'],
             shipping_address=helpers.parse_shipping_address(json),
             return_address=helpers.parse_return_address(json),
+            gifts=[Gift(
+                name=gift['name'],
+                thumbnail='',
+                base_cost=gift['price'],
+                shipping_and_handling_cost=gift['shipping_and_handling'],
+            ) for gift in json['gifts']],
         )
 
 class MailingStatus(Enum):
