@@ -265,6 +265,29 @@ class AMcardsClient:
         card_json = res.json()
         return Card._from_json(card_json)
 
+    def card_count(self, filters: dict = None) -> int:
+        """Fetches count of client's AMcards cards.
+
+        :param Optional[dict] filters: Defaults to ``None``. Filters to be applied when counting cards.
+
+            A common use case is to use ``filter = {'third_party_contact_id': 'some_target_id'}``, this will fetch all cards that were shipped to a recipient with a ``third_party_contact_id == 'some_target_id'``.
+
+        :return: The count of client's cards.
+        :rtype: int
+
+        :raises AuthenticationError: When the client's ``access_token`` is invalid.
+
+        """
+        params = {
+            'limit': 1,
+        } | (filters or {})
+
+        res = requests.get(url=f'{DOMAIN}/.api/v1/card/', headers=self._HEADERS, params=params)
+        if not res.ok:
+            raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
+
+        return res.json()['meta']['total_count']
+
     def mailing(self, id: str | int) -> Mailing:
         """Fetches client's AMcards mailing with a specified id.
 
