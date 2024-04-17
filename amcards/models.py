@@ -266,12 +266,14 @@ class Campaign:
         self,
         id: int,
         name: str,
+        drip_count: int,
         send_if_duplicate: bool,
         has_anniversary_drip: bool = False,
         has_birthday_drip: bool = False,
     ) -> None:
         self._id = id
         self._name = name
+        self._drip_count = drip_count
         self._send_if_duplicate = send_if_duplicate
         self._has_anniversary_drip = has_anniversary_drip
         self._has_birthday_drip = has_birthday_drip
