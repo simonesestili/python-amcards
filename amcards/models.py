@@ -289,6 +289,11 @@ class Campaign:
         return self._name
 
     @property
+    def drip_count(self) -> int:
+        """Drip campaign's drip count."""
+        return self._drip_count
+
+    @property
     def send_if_duplicate(self) -> bool:
         """If True, AMcards will not attempt to detect and prevent duplicates. Otherwise, if this campaign has been previously sent to a contact, further campaign send attempts to the same contact will be prevented."""
         return self._send_if_duplicate
@@ -308,6 +313,7 @@ class Campaign:
         return cls(
             id=json['id'],
             name=json['title'],
+            drip_count=json['drip_count'],
             send_if_duplicate=json['send_even_if_duplicate'],
             has_anniversary_drip=json['has_anniversary_drip'],
             has_birthday_drip=json['has_birthday_drip'],
