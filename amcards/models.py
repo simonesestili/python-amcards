@@ -891,3 +891,96 @@ class CardsResponse:
             message=json['message'],
             shipping_addresses=json['shipping_addresses'],
         )
+
+class CreditTransaction:
+    """Represents an AMcards CreditTransaction."""
+    def __init__(
+        self,
+        id: int,
+        wallet_id: str,
+        amount_granted: int,
+        amount_before: int,
+        amount_after: int,
+        amount_paid: int,
+        amount: int,
+        description: str,
+        credit_card_details: str,
+        date_created: datetime,
+    ) -> None:
+        self._id = id
+        self._wallet_id = wallet_id
+        self._amount_granted = amount_granted
+        self._amount_before = amount_before
+        self._amount_after = amount_after
+        self._amount_paid = amount_paid
+        self._amount = amount
+        self._description = description
+        self._credit_card_details = credit_card_details
+        self._date_created = date_created
+
+    __repr__ = helpers.repr
+
+    @property
+    def id(self) -> int:
+        """CreditTransaction's unique identifier."""
+        return self._id
+
+    @property
+    def wallet_id(self) -> str:
+        """CreditTransaction's wallet id."""
+        return self._wallet_id
+
+    @property
+    def amount_granted(self) -> int:
+        """CreditTransaction's amount granted in `cents`."""
+        return self._amount_granted
+
+    @property
+    def amount_before(self) -> int:
+        """CreditTransaction's amount before in `cents`."""
+        return self._amount_before
+
+    @property
+    def amount_after(self) -> int:
+        """CreditTransaction's amount after in `cents`."""
+        return self._amount_after
+
+    @property
+    def amount_paid(self) -> int:
+        """CreditTransaction's amount paid in `cents`."""
+        return self._amount_paid
+
+    @property
+    def amount(self) -> int:
+        """CreditTransaction's amount in `cents`."""
+        return self._amount
+
+    @property
+    def description(self) -> str:
+        """CreditTransaction's description."""
+        return self._description
+
+    @property
+    def credit_card_details(self) -> str:
+        """CreditTransaction's credit card details."""
+        return self._credit_card_details
+
+    @property
+    def date_created(self) -> datetime:
+        """Date and time CreditTransaction was created."""
+        return self._date_created
+
+    @classmethod
+    def _from_json(cls, json: dict):
+        return cls(
+            id=int(json['id']),
+            wallet_id=json['wallet_id'],
+            amount_granted=json['grant_volume'],
+            amount_before=json['before_int'],
+            amount_after=json['after_int'],
+            amount_paid=json['amount_paid_int'],
+            amount=json['amount_int'],
+            description=json['description'],
+            credit_card_details=json['credit_card_details'],
+            date_created=helpers.to_datetime(json['date_time']),
+        )

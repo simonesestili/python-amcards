@@ -2,7 +2,7 @@ import requests
 from typing import List, Optional, Callable, Any
 
 
-from .models import User, Template, Gift, Campaign, CardResponse, CardsResponse, CampaignResponse, Card, Contact, Mailing
+from .models import User, Template, Gift, Campaign, CardResponse, CardsResponse, CampaignResponse, Card, Contact, Mailing, CreditTransaction
 from . import exceptions
 from . import __helpers as helpers
 
@@ -96,6 +96,56 @@ class AMcardsClient:
 
         user_json = res.json().get('objects', [{}])[0]
         return User._from_json(user_json)
+
+    def credit_transactions(self, limit: int = 25, skip: int = 0, filters: dict = None) -> List[CreditTransaction]:
+        """Fetches client's AMcards credit transactions.
+
+        :param int limit: Defaults to ``25``. Max number of credit transactions to be fetched.
+        :param int skip: Defaults to ``0``. Number of credit transactions to be skipped.
+        :param Optional[dict] filters: Defaults to ``None``. Filters to be applied when fetching credit transactions.
+
+            A common use case is to use ``filter = {'amount_paid_int__gt': 0}``, this will count all credit transactions that have ``amount_paid > 0``.
+
+        :return: The client's :py:class:`credit transactions <amcards.models.CreditTransaction>`.
+        :rtype: List[:py:class:`CreditTransaction <amcards.models.CreditTransaction>`]
+
+        :raises AuthenticationError: When the client's ``access_token`` is invalid.
+
+        """
+        params = {
+            'limit': limit,
+            'offset': skip,
+        } | (filters or {})
+
+        res = requests.get(url=f'{DOMAIN}/.api/v1/credittransaction/', headers=self._HEADERS, params=params)
+        if not res.ok:
+            raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
+
+        credit_transactions_json = res.json().get('objects', [])
+        return [CreditTransaction._from_json(credit_transaction_json) for credit_transaction_json in credit_transactions_json]
+
+    def credit_transaction_count(self, filters: dict = None) -> int:
+        """Fetches count of client's AMcards credit transactions.
+
+        :param Optional[dict] filters: Defaults to ``None``. Filters to be applied when counting credit transactions.
+
+            A common use case is to use ``filter = {'amount_paid_int__gt': 0}``, this will count all credit transactions that have ``amount_paid > 0``.
+
+        :return: The count of client's credit transactions.
+        :rtype: int
+
+        :raises AuthenticationError: When the client's ``access_token`` is invalid.
+
+        """
+        params = {
+            'limit': 1,
+        } | (filters or {})
+
+        res = requests.get(url=f'{DOMAIN}/.api/v1/credittransaction/', headers=self._HEADERS, params=params)
+        if not res.ok:
+            raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
+
+        return res.json()['meta']['total_count']
 
     def templates(self, limit: int = 25, skip: int = 0) -> List[Template]:
         """Fetches client's AMcards templates.
