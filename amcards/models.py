@@ -1,3 +1,4 @@
+import ast
 from enum import Enum
 from datetime import datetime
 from typing import List, Optional
@@ -494,7 +495,7 @@ class Card:
     @property
     def extra_data(self) -> dict:
         """Extra data attached to this card."""
-        return self._gifts
+        return self._extra_data
 
     @classmethod
     def _from_json(cls, json: dict):
@@ -519,7 +520,7 @@ class Card:
                 base_cost=gift['price'],
                 shipping_and_handling_cost=gift['shipping_and_handling'],
             ) for gift in json['gifts']],
-            extra_data=json.get('extra_data') or {},
+            extra_data=ast.literal_eval(json.get('extra_data') or '{}'),
         )
 
 class MailingStatus(Enum):
