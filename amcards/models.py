@@ -353,6 +353,7 @@ class Card:
         shipping_address: dict,
         return_address: dict,
         gifts: List[Gift],
+        extra_data: dict,
     ) -> None:
         self._id = id
         self._amount_charged = amount_charged
@@ -369,6 +370,7 @@ class Card:
         self._shipping_address = shipping_address
         self._return_address = return_address
         self._gifts = gifts
+        self._extra_data = extra_data
 
     __repr__ = helpers.repr
 
@@ -489,6 +491,11 @@ class Card:
         """Gifts attached to this card."""
         return self._gifts
 
+    @property
+    def extra_data(self) -> dict:
+        """Extra data attached to this card."""
+        return self._gifts
+
     @classmethod
     def _from_json(cls, json: dict):
         return cls(
@@ -512,6 +519,7 @@ class Card:
                 base_cost=gift['price'],
                 shipping_and_handling_cost=gift['shipping_and_handling'],
             ) for gift in json['gifts']],
+            extra_data=json.get('extra_data') or {},
         )
 
 class MailingStatus(Enum):
