@@ -119,7 +119,9 @@ class AMcardsClient:
 
         res = requests.get(url=f'{DOMAIN}/.api/v1/credittransaction/', headers=self._HEADERS, params=params)
         if not res.ok:
-            raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
+            if res.status_code == 401:
+                raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
+            raise exceptions.AMcardsException(f'Something went wrong when fetching credit transactions. AMcards Status Code: {res.status_code}, AMcards Body: {res.text}.')
 
         credit_transactions_json = res.json().get('objects', [])
         return [CreditTransaction._from_json(credit_transaction_json) for credit_transaction_json in credit_transactions_json]
@@ -143,7 +145,9 @@ class AMcardsClient:
 
         res = requests.get(url=f'{DOMAIN}/.api/v1/credittransaction/', headers=self._HEADERS, params=params)
         if not res.ok:
-            raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
+            if res.status_code == 401:
+                raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
+            raise exceptions.AMcardsException(f'Something went wrong when fetching credit transaction count. AMcards Status Code: {res.status_code}, AMcards Body: {res.text}.')
 
         return res.json()['meta']['total_count']
 
@@ -161,7 +165,9 @@ class AMcardsClient:
         """
         res = requests.get(url=f'{DOMAIN}/.api/v1/template/', headers=self._HEADERS, params={'limit': limit, 'offset': skip})
         if not res.ok:
-            raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
+            if res.status_code == 401:
+                raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
+            raise exceptions.AMcardsException(f'Something went wrong when fetching templates. AMcards Status Code: {res.status_code}, AMcards Body: {res.text}.')
 
         templates_json = res.json().get('objects', [])
         return [Template._from_json(template_json) for template_json in templates_json]
@@ -201,7 +207,9 @@ class AMcardsClient:
         """
         res = requests.get(url=f'{DOMAIN}/.api/v1/quicksendtemplate/', headers=self._HEADERS, params={'limit': limit, 'offset': skip})
         if not res.ok:
-            raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
+            if res.status_code == 401:
+                raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
+            raise exceptions.AMcardsException(f'Something went wrong when fetching quicksends. AMcards Status Code: {res.status_code}, AMcards Body: {res.text}.')
 
         templates_json = res.json().get('objects', [])
         return [Template._from_json(template_json) for template_json in templates_json]
@@ -241,7 +249,9 @@ class AMcardsClient:
         """
         res = requests.get(url=f'{DOMAIN}/.api/v1/campaign/', headers=self._HEADERS, params={'limit': limit, 'offset': skip})
         if not res.ok:
-            raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
+            if res.status_code == 401:
+                raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
+            raise exceptions.AMcardsException(f'Something went wrong when fetching campaigns. AMcards Status Code: {res.status_code}, AMcards Body: {res.text}.')
 
         campaigns_json = res.json().get('objects', [])
         return [Campaign._from_json(campaign_json) for campaign_json in campaigns_json]
@@ -289,7 +299,9 @@ class AMcardsClient:
 
         res = requests.get(url=f'{DOMAIN}/.api/v1/card/', headers=self._HEADERS, params=params)
         if not res.ok:
-            raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
+            if res.status_code == 401:
+                raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
+            raise exceptions.AMcardsException(f'Something went wrong when fetching cards. AMcards Status Code: {res.status_code}, AMcards Body: {res.text}.')
 
         cards_json = res.json().get('objects', [])
         return [Card._from_json(card_json) for card_json in cards_json]
@@ -334,7 +346,9 @@ class AMcardsClient:
 
         res = requests.get(url=f'{DOMAIN}/.api/v1/card/', headers=self._HEADERS, params=params)
         if not res.ok:
-            raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
+            if res.status_code == 401:
+                raise exceptions.AuthenticationError('Access token provided to client is unauthorized')
+            raise exceptions.AMcardsException(f'Something went wrong when fetching card count. AMcards Status Code: {res.status_code}, AMcards Body: {res.text}.')
 
         return res.json()['meta']['total_count']
 
