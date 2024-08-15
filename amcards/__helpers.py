@@ -1,6 +1,6 @@
 import time
 from typing import Optional
-from datetime import datetime
+import datetime
 
 REQUIRED_SHIPPING_ADDRESS_FIELDS = {
     'first_name',
@@ -42,28 +42,28 @@ def current_timestamp() -> int:
     return int(time.time() * 1000)
 
 def today() -> str:
-    today = datetime.today()
+    today = datetime.datetime.today()
     yyyy = today.year
     mm, dd = map(lambda x: str(x).zfill(2), (today.month, today.day))
     return f'{yyyy}-{mm}-{dd}'
 
-def to_datetime(datetime_str: Optional[str]) -> Optional[datetime]:
+def to_datetime(datetime_str: Optional[str]) -> Optional[datetime.datetime]:
     if datetime_str is None:
         return None
 
     if 'T' in datetime_str:
         if '.' in datetime_str:
-            return datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M:%S.%f')
-        return datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M:%S')
+            return datetime.datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M:%S.%f')
+        return datetime.datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M:%S')
 
     if ' ' in datetime_str:
         if '.' in datetime_str:
-            return datetime.strptime(datetime_str, '%Y-%m-%d %H:%M:%S.%f')
-        return datetime.strptime(datetime_str, '%Y-%m-%d %H:%M:%S')
+            return datetime.datetime.strptime(datetime_str, '%Y-%m-%d %H:%M:%S.%f')
+        return datetime.datetime.strptime(datetime_str, '%Y-%m-%d %H:%M:%S')
 
     if '.' in datetime_str:
-        return datetime.strptime(datetime_str, '%Y-%m-%d%H:%M:%S.%f')
-    return datetime.strptime(datetime_str, '%Y-%m-%d%H:%M:%S')
+        return datetime.datetime.strptime(datetime_str, '%Y-%m-%d%H:%M:%S.%f')
+    return datetime.datetime.strptime(datetime_str, '%Y-%m-%d%H:%M:%S')
 
 def format_cents(price_in_cents: int) -> str:
     whole, fractional = map(str, divmod(price_in_cents, 100))
