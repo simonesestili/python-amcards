@@ -1011,11 +1011,11 @@ class AMcardsClient:
 
         # Validate birth_date
         if 'birth_date' in shipping_address and not helpers.is_valid_birthdate(shipping_address['birth_date']):
-            error_message = 'Invalid birth_date format, please specify date as "YYYY-MM-DD", or omit it'
+            error_message = f'Invalid birth_date format of "{shipping_address["birth_date"]}", please specify date as "YYYY-MM-DD", or omit it'
             raise exceptions.DateFormatError(error_message)
         # Validate anniversary_date
         if 'anniversary_date' in shipping_address and not helpers.is_valid_date(shipping_address['anniversary_date']):
-            error_message = 'Invalid anniversary_date format, please specify date as "YYYY-MM-DD", or omit it'
+            error_message = f'Invalid anniversary_date format of "{shipping_address["anniversary_date"]}", please specify date as "YYYY-MM-DD", or omit it'
             raise exceptions.DateFormatError(error_message)
         # Validate phone_number
         if 'phone_number' in shipping_address and not helpers.is_valid_phone(shipping_address['phone_number']):
