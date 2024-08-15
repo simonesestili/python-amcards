@@ -78,13 +78,27 @@ def get_missing_required_shipping_address_fields(shipping_address: dict) -> list
     return missings
 
 def is_valid_date(date: str) -> bool:
-    if not isinstance(date, str): return False
-    if len(date) != 10: return False
-    if date.count('-') != 2 or date[4] != '-' or date[7] != '-': return False
-    for part in date.split('-'):
-        if not part.isdigit():
-            return False
-    return True
+    if not isinstance(date, str):
+        return False
+    try:
+        datetime.datetime.strptime(date, '%Y-%m-%d')
+        return True
+    except:
+        return False
+
+def is_valid_birthdate(date: str) -> bool:
+    if not isinstance(date, str):
+        return False
+    try:
+        datetime.datetime.strptime(date, '%Y-%m-%d')
+        return True
+    except:
+        pass
+    try:
+        datetime.datetime.strptime(date, '%m-%d')
+        return True
+    except:
+        return False
 
 def is_valid_phone(phone: str) -> bool:
     if not isinstance(phone, str): return False

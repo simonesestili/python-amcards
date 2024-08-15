@@ -855,7 +855,7 @@ class AMcardsClient:
             return_address = {f'return_{key}': value for key, value in return_address.items()}
 
         # Validate birth_date
-        if 'birth_date' in shipping_address and not helpers.is_valid_date(shipping_address['birth_date']):
+        if 'birth_date' in shipping_address and not helpers.is_valid_birthdate(shipping_address['birth_date']):
             error_message = 'Invalid birth_date format, please specify date as "YYYY-MM-DD", or omit it'
             raise exceptions.DateFormatError(error_message)
         # Validate anniversary_date
@@ -1010,7 +1010,7 @@ class AMcardsClient:
             return_address = {f'return_{key}': value for key, value in return_address.items()}
 
         # Validate birth_date
-        if 'birth_date' in shipping_address and not helpers.is_valid_date(shipping_address['birth_date']):
+        if 'birth_date' in shipping_address and not helpers.is_valid_birthdate(shipping_address['birth_date']):
             error_message = 'Invalid birth_date format, please specify date as "YYYY-MM-DD", or omit it'
             raise exceptions.DateFormatError(error_message)
         # Validate anniversary_date
