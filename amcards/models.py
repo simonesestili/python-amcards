@@ -334,6 +334,9 @@ class CardStatus(Enum):
     PROCESSING = 7
     REFUNDED = 8
     TESTING = 9
+    GIFT_UNAVAILABLE = 10
+    PROOF_PRINT = 11
+    RETURN_TO_SENDER = 12
 
 class Card:
     """Represents an AMcards card."""
