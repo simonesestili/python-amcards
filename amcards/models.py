@@ -337,6 +337,7 @@ class CardStatus(Enum):
     GIFT_UNAVAILABLE = 10
     PROOF_PRINT = 11
     RETURN_TO_SENDER = 12
+    DUPLICATE = 13
 
 class Card:
     """Represents an AMcards card."""
